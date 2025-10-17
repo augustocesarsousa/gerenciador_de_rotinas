@@ -1,0 +1,5 @@
+# Ignorar arquivos de backup
+*.bkp
+
+# Ignorar arquivos temporários do Word (terminam com #)
+*.docx#
