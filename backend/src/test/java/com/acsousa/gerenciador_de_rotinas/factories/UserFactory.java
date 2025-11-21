@@ -1,8 +1,10 @@
 package com.acsousa.gerenciador_de_rotinas.factories;
 
+import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
 import com.acsousa.gerenciador_de_rotinas.enums.UserProfile;
 import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
 import com.acsousa.gerenciador_de_rotinas.models.UserModel;
+import com.acsousa.gerenciador_de_rotinas.utils.mapper.ConvertMapper;
 
 import java.time.LocalDateTime;
 
@@ -20,8 +22,19 @@ public class UserFactory {
         userModel.setProfile(UserProfile.ADMIN);
         userModel.setCreatedAt(LocalDateTime.of(2025,1,1,9,30));
         userModel.setUpdatedAt(LocalDateTime.of(2025,1,1,9,30));
-        userModel.setIdUserEdit(1L);
+        userModel.setUserIdEdit(1L);
 
         return userModel;
+    }
+
+    public static UserDTO createValidUserDTO() {
+        UserDTO userDTO = ConvertMapper.convertObject(createUserModel(), UserDTO.class);
+
+        userDTO.setId(null);
+        userDTO.setStatus(null);
+        userDTO.setCreatedAt(null);
+        userDTO.setUpdatedAt(null);
+
+        return userDTO;
     }
 }
