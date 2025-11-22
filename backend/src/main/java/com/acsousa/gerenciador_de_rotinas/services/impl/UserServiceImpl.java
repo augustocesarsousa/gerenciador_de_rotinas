@@ -10,6 +10,7 @@ import com.acsousa.gerenciador_de_rotinas.utils.mapper.ConvertMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -41,8 +42,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> findAll(Pageable pageable) {
-        Page<UserModel> userModelPage = userRepository.findAll(pageable);
+    public Page<UserDTO> findAll(Specification<UserModel> spec, Pageable pageable) {
+        Page<UserModel> userModelPage = userRepository.findAll(spec, pageable);
         return userModelPage.map(userModel -> ConvertMapper.convertObject(userModel, UserDTO.class));
     }
 }

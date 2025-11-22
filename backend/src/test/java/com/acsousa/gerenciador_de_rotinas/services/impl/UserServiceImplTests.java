@@ -5,6 +5,7 @@ import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
 import com.acsousa.gerenciador_de_rotinas.exceptions.custom.ResourceNotFoundException;
 import com.acsousa.gerenciador_de_rotinas.factories.UserFactory;
 import com.acsousa.gerenciador_de_rotinas.models.UserModel;
+import com.acsousa.gerenciador_de_rotinas.specifications.queryFilter.UserQueryFilter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,12 +28,14 @@ public class UserServiceImplTests {
     private UserDTO validUserDTO;
     private Long notExistingId;
     private Pageable pageable;
+    private UserQueryFilter userQueryFilter;
 
     @BeforeEach
     void setUp() throws Exception {
         validUserDTO = UserFactory.createValidUserDTO();
         notExistingId = 1000L;
         pageable = PageRequest.of(0,10);
+        userQueryFilter = new UserQueryFilter();
     }
 
     @Test
@@ -65,7 +68,7 @@ public class UserServiceImplTests {
 
     @Test
     public void findAllShouldReturnPagedResults() {
-        Page<UserDTO> userDTOPage = userService.findAll(pageable);
+        Page<UserDTO> userDTOPage = userService.findAll(userQueryFilter.toSpecification(), pageable);
 
         Assertions.assertNotNull(userDTOPage);
         Assertions.assertFalse(userDTOPage.isEmpty());

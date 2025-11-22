@@ -3,6 +3,7 @@ package com.acsousa.gerenciador_de_rotinas.controllers;
 import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
 import com.acsousa.gerenciador_de_rotinas.models.UserModel;
 import com.acsousa.gerenciador_de_rotinas.services.impl.UserServiceImpl;
+import com.acsousa.gerenciador_de_rotinas.specifications.queryFilter.UserQueryFilter;
 import com.acsousa.gerenciador_de_rotinas.utils.mapper.ConvertMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,8 +33,9 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserDTO>> findAll(@PageableDefault(page = 0, size = 10, sort = "id",
+    public ResponseEntity<Page<UserDTO>> findAll(UserQueryFilter filter,
+            @PageableDefault(page = 0, size = 10, sort = "id",
             direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(filter.toSpecification(), pageable));
     }
 }
