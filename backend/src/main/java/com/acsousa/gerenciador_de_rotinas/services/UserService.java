@@ -5,4 +5,6 @@ import com.acsousa.gerenciador_de_rotinas.models.UserModel;
 
 public interface UserService {
     UserModel create(UserDTO userDTO);
+
+    UserDTO findById(Long id);
 }

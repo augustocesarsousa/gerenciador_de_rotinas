@@ -2,9 +2,9 @@ package com.acsousa.gerenciador_de_rotinas.services.impl;
 
 import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
 import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.exceptions.custom.ResourceNotFoundException;
 import com.acsousa.gerenciador_de_rotinas.factories.UserFactory;
 import com.acsousa.gerenciador_de_rotinas.models.UserModel;
-import com.acsousa.gerenciador_de_rotinas.services.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.mockito.ArgumentMatchers.any;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -24,10 +22,12 @@ public class UserServiceImplTests {
     private UserServiceImpl userService;
 
     private UserDTO validUserDTO;
+    private Long notExistingId;
 
     @BeforeEach
     void setUp() throws Exception {
         validUserDTO = UserFactory.createValidUserDTO();
+        notExistingId = 1000L;
     }
 
     @Test
@@ -39,5 +39,22 @@ public class UserServiceImplTests {
         Assertions.assertEquals("Hal Jordan", userModel.getName());
         Assertions.assertEquals(UserStatus.ACTIVE, userModel.getStatus());
         Assertions.assertNotNull(userModel.getCreatedAt());
+    }
+
+    @Test
+    public void findByIdShouldReturnEntityFromDatabaseWhenExistingId() {
+        UserModel userModelCreated = userService.create(validUserDTO);
+        
+        UserDTO userModelFound = userService.findById(userModelCreated.getId());
+        
+        Assertions.assertNotNull(userModelFound);
+        Assertions.assertEquals(userModelFound.getId(), userModelCreated.getId());
+    }
+
+    @Test
+    public void findByIdShouldThrowResourceNotFoundExceptionWhenNotExistingId() {
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            userService.findById(notExistingId);
+        });
     }
 }
