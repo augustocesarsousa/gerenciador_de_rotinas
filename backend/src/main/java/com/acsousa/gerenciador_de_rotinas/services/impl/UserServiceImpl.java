@@ -23,12 +23,14 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public UserModel create(UserDTO userDTO) {
+    public UserDTO create(UserDTO userDTO) {
         userDTO.setStatus(UserStatus.ACTIVE);
         userDTO.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
         userDTO.setUpdatedAt(LocalDateTime.now(ZoneId.of("UTC")));
 
-        return userRepository.save(ConvertMapper.convertObject(userDTO, UserModel.class));
+        UserModel userModelCreated = userRepository.save(ConvertMapper.convertObject(userDTO, UserModel.class));
+
+        return ConvertMapper.convertObject(userModelCreated, UserDTO.class);
     }
 
     @Override

@@ -40,23 +40,23 @@ public class UserServiceImplTests {
 
     @Test
     public void createShouldPersistEntityInDatabaseWhenValidData() {
-        UserModel userModel = userService.create(validUserDTO);
+        UserDTO userDTO = userService.create(validUserDTO);
 
-        Assertions.assertNotNull(userModel);
-        Assertions.assertNotNull(userModel.getId());
-        Assertions.assertEquals("Hal Jordan", userModel.getName());
-        Assertions.assertEquals(UserStatus.ACTIVE, userModel.getStatus());
-        Assertions.assertNotNull(userModel.getCreatedAt());
+        Assertions.assertNotNull(userDTO);
+        Assertions.assertNotNull(userDTO.getId());
+        Assertions.assertEquals("Hal Jordan", userDTO.getName());
+        Assertions.assertEquals(UserStatus.ACTIVE, userDTO.getStatus());
+        Assertions.assertNotNull(userDTO.getCreatedAt());
     }
 
     @Test
     public void findByIdShouldReturnEntityFromDatabaseWhenExistingId() {
-        UserModel userModelCreated = userService.create(validUserDTO);
+        UserDTO userDTOCreated = userService.create(validUserDTO);
         
-        UserDTO userModelFound = userService.findById(userModelCreated.getId());
+        UserDTO userDTOFound = userService.findById(userDTOCreated.getId());
         
-        Assertions.assertNotNull(userModelFound);
-        Assertions.assertEquals(userModelFound.getId(), userModelCreated.getId());
+        Assertions.assertNotNull(userDTOFound);
+        Assertions.assertEquals(userDTOFound.getId(), userDTOCreated.getId());
     }
 
     @Test

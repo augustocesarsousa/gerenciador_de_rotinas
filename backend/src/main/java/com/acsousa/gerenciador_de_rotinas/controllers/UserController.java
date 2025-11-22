@@ -23,8 +23,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
-        UserModel userModel = userService.create(userDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ConvertMapper.convertObject(userModel, UserDTO.class));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(userDTO));
     }
 
     @GetMapping("/{id}")
