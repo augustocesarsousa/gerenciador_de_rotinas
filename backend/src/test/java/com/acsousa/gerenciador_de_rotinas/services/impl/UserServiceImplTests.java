@@ -10,8 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -23,11 +26,13 @@ public class UserServiceImplTests {
 
     private UserDTO validUserDTO;
     private Long notExistingId;
+    private Pageable pageable;
 
     @BeforeEach
     void setUp() throws Exception {
         validUserDTO = UserFactory.createValidUserDTO();
         notExistingId = 1000L;
+        pageable = PageRequest.of(0,10);
     }
 
     @Test
@@ -56,5 +61,13 @@ public class UserServiceImplTests {
         Assertions.assertThrows(ResourceNotFoundException.class, () -> {
             userService.findById(notExistingId);
         });
+    }
+
+    @Test
+    public void findAllShouldReturnPagedResults() {
+        Page<UserDTO> userDTOPage = userService.findAll(pageable);
+
+        Assertions.assertNotNull(userDTOPage);
+        Assertions.assertFalse(userDTOPage.isEmpty());
     }
 }
