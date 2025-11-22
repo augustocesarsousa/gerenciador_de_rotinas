@@ -7,11 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface UserService {
-    UserDTO create(UserDTO userDTO);
+    UserDTO create(UserDTO userDTOToCreate);
 
     UserDTO findById(Long id);
 
     Page<UserDTO> findAll(Specification<UserModel> spec, Pageable pageable);
 
-
+    UserDTO update(Long id, UserDTO userDTOToUpdate);
 }

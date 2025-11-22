@@ -20,7 +20,7 @@ import org.springframework.data.domain.Pageable;
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-public class UserServiceImplTests {
+public class UserServiceImplIT {
 
     @Autowired
     private UserServiceImpl userService;
@@ -40,13 +40,13 @@ public class UserServiceImplTests {
 
     @Test
     public void createShouldPersistEntityInDatabaseWhenValidData() {
-        UserDTO userDTO = userService.create(validUserDTO);
+        UserDTO userDTOCreated = userService.create(validUserDTO);
 
-        Assertions.assertNotNull(userDTO);
-        Assertions.assertNotNull(userDTO.getId());
-        Assertions.assertEquals("Hal Jordan", userDTO.getName());
-        Assertions.assertEquals(UserStatus.ACTIVE, userDTO.getStatus());
-        Assertions.assertNotNull(userDTO.getCreatedAt());
+        Assertions.assertNotNull(userDTOCreated);
+        Assertions.assertNotNull(userDTOCreated.getId());
+        Assertions.assertEquals("Hal Jordan", userDTOCreated.getName());
+        Assertions.assertEquals(UserStatus.ACTIVE, userDTOCreated.getStatus());
+        Assertions.assertNotNull(userDTOCreated.getCreatedAt());
     }
 
     @Test
@@ -72,5 +72,16 @@ public class UserServiceImplTests {
 
         Assertions.assertNotNull(userDTOPage);
         Assertions.assertFalse(userDTOPage.isEmpty());
+    }
+
+    @Test
+    public void updateShouldUpdateEntityInDatabaseWhenValidData(){
+        UserDTO userDTOCreated = userService.create(validUserDTO);
+
+        userDTOCreated.setName("John Stewart");
+        UserDTO userDTOUpdated = userService.update(userDTOCreated.getId(), userDTOCreated);
+
+        Assertions.assertEquals("John Stewart", userDTOUpdated.getName());
+        Assertions.assertEquals(userDTOUpdated.getId(), userDTOCreated.getId());
     }
 }

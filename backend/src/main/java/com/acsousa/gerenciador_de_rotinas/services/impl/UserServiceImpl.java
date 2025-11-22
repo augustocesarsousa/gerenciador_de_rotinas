@@ -23,12 +23,12 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public UserDTO create(UserDTO userDTO) {
-        userDTO.setStatus(UserStatus.ACTIVE);
-        userDTO.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
-        userDTO.setUpdatedAt(LocalDateTime.now(ZoneId.of("UTC")));
+    public UserDTO create(UserDTO userDTOToCreate) {
+        userDTOToCreate.setStatus(UserStatus.ACTIVE);
+        userDTOToCreate.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
+        userDTOToCreate.setUpdatedAt(LocalDateTime.now(ZoneId.of("UTC")));
 
-        UserModel userModelCreated = userRepository.save(ConvertMapper.convertObject(userDTO, UserModel.class));
+        UserModel userModelCreated = userRepository.save(ConvertMapper.convertObject(userDTOToCreate, UserModel.class));
 
         return ConvertMapper.convertObject(userModelCreated, UserDTO.class);
     }
@@ -36,16 +36,33 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findById(Long id) {
         Optional<UserModel> userModelOptional = userRepository.findById(id);
-
-        UserModel userFound = userModelOptional.orElseThrow(
+        UserModel userModelFound = userModelOptional.orElseThrow(
                 () -> new ResourceNotFoundException("Usuário não encontrato"));
 
-        return ConvertMapper.convertObject(userFound, UserDTO.class);
+        return ConvertMapper.convertObject(userModelFound, UserDTO.class);
     }
 
     @Override
     public Page<UserDTO> findAll(Specification<UserModel> spec, Pageable pageable) {
         Page<UserModel> userModelPage = userRepository.findAll(spec, pageable);
         return userModelPage.map(userModel -> ConvertMapper.convertObject(userModel, UserDTO.class));
+    }
+
+    @Override
+    public UserDTO update(Long id, UserDTO userDTOToUpdate) {
+        Optional<UserModel> userModelOptional = userRepository.findById(id);
+        UserModel userModelFound = userModelOptional.orElseThrow(
+                () -> new ResourceNotFoundException("Usuário não encontrato"));
+
+        if(userDTOToUpdate.getPassword() == null) {
+            userDTOToUpdate.setPassword(userModelFound.getPassword());
+        }
+        userDTOToUpdate.setId(userModelFound.getId());
+        userDTOToUpdate.setCreatedAt(userModelFound.getCreatedAt());
+        userDTOToUpdate.setUpdatedAt(LocalDateTime.now(ZoneId.of("UTC")));
+
+        UserModel userModelUpdated = userRepository.save(ConvertMapper.convertObject(userDTOToUpdate, UserModel.class));
+
+        return ConvertMapper.convertObject(userModelUpdated, UserDTO.class);
     }
 }

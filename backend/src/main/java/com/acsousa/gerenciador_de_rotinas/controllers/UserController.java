@@ -22,8 +22,8 @@ public class UserController {
     UserServiceImpl userService;
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(userDTO));
+    public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTOToCreate) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(userDTOToCreate));
     }
 
     @GetMapping("/{id}")
@@ -36,5 +36,11 @@ public class UserController {
             @PageableDefault(page = 0, size = 10, sort = "id",
             direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(filter.toSpecification(), pageable));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable(value = "id") Long id,
+                                          @RequestBody UserDTO userDTOToUpdate) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.update(id, userDTOToUpdate));
     }
 }
