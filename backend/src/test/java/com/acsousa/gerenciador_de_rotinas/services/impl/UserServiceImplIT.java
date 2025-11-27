@@ -4,7 +4,6 @@ import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
 import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
 import com.acsousa.gerenciador_de_rotinas.exceptions.custom.ResourceNotFoundException;
 import com.acsousa.gerenciador_de_rotinas.factories.UserFactory;
-import com.acsousa.gerenciador_de_rotinas.models.UserModel;
 import com.acsousa.gerenciador_de_rotinas.specifications.queryFilter.UserQueryFilter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

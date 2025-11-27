@@ -54,10 +54,10 @@ public class UserServiceImpl implements UserService {
         UserModel userModelFound = userModelOptional.orElseThrow(
                 () -> new ResourceNotFoundException("Usuário não encontrato"));
 
+        userDTOToUpdate.setId(userModelFound.getId());
         if(userDTOToUpdate.getPassword() == null) {
             userDTOToUpdate.setPassword(userModelFound.getPassword());
         }
-        userDTOToUpdate.setId(userModelFound.getId());
         userDTOToUpdate.setCreatedAt(userModelFound.getCreatedAt());
         userDTOToUpdate.setUpdatedAt(LocalDateTime.now(ZoneId.of("UTC")));
 
