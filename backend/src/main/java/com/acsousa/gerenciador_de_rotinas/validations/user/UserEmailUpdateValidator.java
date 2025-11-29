@@ -1,5 +1,6 @@
 package com.acsousa.gerenciador_de_rotinas.validations.user;
 
+import com.acsousa.gerenciador_de_rotinas.exceptions.handler.FieldMessage;
 import com.acsousa.gerenciador_de_rotinas.models.UserModel;
 import com.acsousa.gerenciador_de_rotinas.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,6 +9,8 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerMapping;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,7 +31,19 @@ public class UserEmailUpdateValidator implements ConstraintValidator<UserEmailUp
         Map<String, String> uriVars = (Map<String, String>) httpServletRequest.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         Long userIdRequest = Long.parseLong(uriVars.get("id"));
         UserModel userModel = userRepository.findByEmail(email);
+        List<FieldMessage> fieldMessageList = new ArrayList<>();
 
-        return Objects.nonNull(userModel) && Objects.equals(userModel.getId(), userIdRequest);
+        if(Objects.nonNull(userModel) && !Objects.equals(userModel.getId(), userIdRequest)){
+            fieldMessageList.add(new FieldMessage(null, "E-mail já cadastrado pra outro usuário"));
+        }
+
+        for (FieldMessage fieldMessage : fieldMessageList) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(fieldMessage.getMessage())
+                    .addPropertyNode(fieldMessage.getFieldName())
+                    .addConstraintViolation();
+        }
+
+        return fieldMessageList.isEmpty();
     }
 }
