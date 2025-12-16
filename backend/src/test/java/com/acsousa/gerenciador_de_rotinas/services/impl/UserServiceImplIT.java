@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 @SpringBootTest
 @Transactional
 public class UserServiceImplIT {
-
     @Autowired
     private UserServiceImpl userService;
 
