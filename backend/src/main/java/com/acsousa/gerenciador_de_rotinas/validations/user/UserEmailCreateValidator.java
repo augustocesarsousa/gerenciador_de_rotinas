@@ -25,7 +25,7 @@ public class UserEmailCreateValidator implements ConstraintValidator<UserEmailCr
         List<FieldMessage> fieldMessageList = new ArrayList<>();
 
         if(Objects.nonNull(userRepository.findByEmail(email))){
-            fieldMessageList.add(new FieldMessage(null, "E-mail já cadastrado pra outro usuário"));
+            fieldMessageList.add(new FieldMessage(null, "E-mail já cadastrado para outro usuário"));
         }
 
         for (FieldMessage fieldMessage : fieldMessageList) {

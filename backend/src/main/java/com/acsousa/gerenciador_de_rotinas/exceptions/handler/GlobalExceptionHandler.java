@@ -2,9 +2,11 @@ package com.acsousa.gerenciador_de_rotinas.exceptions.handler;
 
 import com.acsousa.gerenciador_de_rotinas.exceptions.custom.AttributeAlreadyExistsException;
 import com.acsousa.gerenciador_de_rotinas.exceptions.custom.ResourceNotFoundException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -59,5 +61,28 @@ public class GlobalExceptionHandler {
         }
 
         return ResponseEntity.status(httpStatus).body(validationError);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<StandardError> requestError(HttpMessageNotReadableException e, HttpServletRequest request) {
+        HttpStatus httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+        StandardError standardError = new StandardError();
+        String message = "Erro na formatação do JSON ou valor inválido.";
+
+        if (e.getCause() instanceof InvalidFormatException invalidFormatException) {
+
+            if (invalidFormatException.getPath() != null && !invalidFormatException.getPath().isEmpty()) {
+                String fieldName = invalidFormatException.getPath().getFirst().getFieldName();
+                message = String.format("O campo '%s' possui um valor inválido.", fieldName);
+            }
+        }
+
+        standardError.setTimestamp(Instant.now());
+        standardError.setStatus(httpStatus.value());
+        standardError.setError("Request error");
+        standardError.setMessage(message);
+        standardError.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(httpStatus).body(standardError);
     }
 }

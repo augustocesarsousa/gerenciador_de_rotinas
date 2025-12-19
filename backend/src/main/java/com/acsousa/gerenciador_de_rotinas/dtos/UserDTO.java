@@ -29,8 +29,8 @@ public class UserDTO implements Serializable {
 
     @JsonView({Views.Create.class, Views.Find.class, Views.Update.class})
     @NotBlank(message = "Login é obrigatório", groups = {Views.Create.class, Views.Update.class})
-    @UserLoginCreateValid(message = "Login já cadastrado para outro usuário", groups = {Views.Create.class})
-    @UserLoginUpdateValid(message = "Login já cadastrado para outro usuário", groups = {Views.Update.class})
+    @UserLoginCreateValid(groups = {Views.Create.class})
+    @UserLoginUpdateValid(groups = {Views.Update.class})
     private String login;
 
     @JsonView({Views.Create.class, Views.Update.class})
@@ -39,8 +39,9 @@ public class UserDTO implements Serializable {
 
     @JsonView({Views.Create.class, Views.Find.class, Views.Update.class})
     @Email(message = "E-mail inválido", groups = {Views.Create.class, Views.Update.class})
-    @UserEmailCreateValid(message = "Email já cadastrado para outro usuário", groups = {Views.Create.class})
-    @UserEmailUpdateValid(message = "Email já cadastrado para outro usuário", groups = {Views.Update.class})
+    @NotBlank(message = "E-mail é obrigatório", groups = {Views.Create.class, Views.Update.class})
+    @UserEmailCreateValid(groups = {Views.Create.class})
+    @UserEmailUpdateValid(groups = {Views.Update.class})
     private String email;
 
     @JsonView({Views.Find.class, Views.Update.class})
