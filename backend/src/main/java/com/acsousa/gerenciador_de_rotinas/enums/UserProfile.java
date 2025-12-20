@@ -3,7 +3,7 @@ package com.acsousa.gerenciador_de_rotinas.enums;
 import lombok.Getter;
 
 @Getter
-public enum UserProfile {
+public enum UserProfile implements DescribableEnum {
     ADMIN("Admininstrador"),
     FINANCIAL("Financeiro");
 
@@ -11,5 +11,10 @@ public enum UserProfile {
 
     UserProfile(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String getDescription(){
+        return this.description;
     }
 }

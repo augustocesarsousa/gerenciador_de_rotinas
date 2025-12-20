@@ -2,8 +2,12 @@ package com.acsousa.gerenciador_de_rotinas.controllers;
 
 import com.acsousa.gerenciador_de_rotinas.dtos.CustomPageDTO;
 import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
+import com.acsousa.gerenciador_de_rotinas.enums.UserProfile;
+import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.records.EnumRecord;
 import com.acsousa.gerenciador_de_rotinas.services.impl.UserServiceImpl;
 import com.acsousa.gerenciador_de_rotinas.specifications.queryFilter.UserQueryFilter;
+import com.acsousa.gerenciador_de_rotinas.utils.enums.EnumUtil;
 import com.acsousa.gerenciador_de_rotinas.utils.json.Views;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -53,5 +59,15 @@ public class UserController {
                                           @Validated(Views.Update.class)
                                           UserDTO userDTOToUpdate) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.update(id, userDTOToUpdate).getId());
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<List<EnumRecord>> getStatus() {
+        return ResponseEntity.status(HttpStatus.OK).body(EnumUtil.convertEnumToList(UserStatus.class));
+    }
+
+    @GetMapping("/profiles")
+    public ResponseEntity<List<EnumRecord>> getProfiles() {
+        return ResponseEntity.status(HttpStatus.OK).body(EnumUtil.convertEnumToList(UserProfile.class));
     }
 }
