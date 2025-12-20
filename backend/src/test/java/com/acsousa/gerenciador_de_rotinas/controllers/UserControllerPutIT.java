@@ -13,7 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class UserControllerPostIT {
+public class UserControllerPutIT {
     @Autowired
     private MockMvc mockMvc;
 
@@ -29,19 +29,33 @@ public class UserControllerPostIT {
     private ObjectMapper objectMapper;
 
     private UserDTO validUserDTO;
+    private Long existingUserId;
+    private Long notExistingUserId;
 
     @BeforeEach
     void setUp() throws Exception {
         validUserDTO = UserFactory.createValidUserDTO();
+        existingUserId = 1L;
+        notExistingUserId = 1000L;
     }
 
     @Test
-    public void createShouldPersistEntityInDatabaseWhenValidData() throws Exception {
+    public void updateShouldPersistEntityInDatabaseWhenValidData() throws Exception {
         String jsonBody = objectMapper.writeValueAsString(validUserDTO);
 
-        mockMvc.perform(post("/users")
+        mockMvc.perform(put("/users/{id}", existingUserId)
                         .content(jsonBody)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateShouldReturnNotFoundWhenNotExistingId() throws Exception {
+        String jsonBody = objectMapper.writeValueAsString(validUserDTO);
+
+        mockMvc.perform(put("/users/{id}", notExistingUserId)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
