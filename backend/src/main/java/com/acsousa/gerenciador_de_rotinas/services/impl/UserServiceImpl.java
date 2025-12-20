@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
                 () -> new ResourceNotFoundException("Usuário não encontrato"));
 
         userDTOToUpdate.setId(userModelFound.getId());
-        if(userDTOToUpdate.getPassword() == null) {
+        if(userDTOToUpdate.getPassword() == null || userDTOToUpdate.getPassword().trim().isEmpty()) {
             userDTOToUpdate.setPassword(userModelFound.getPassword());
         }
         userDTOToUpdate.setCreatedAt(userModelFound.getCreatedAt());

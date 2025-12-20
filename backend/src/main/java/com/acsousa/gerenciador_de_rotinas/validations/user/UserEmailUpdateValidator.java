@@ -34,7 +34,7 @@ public class UserEmailUpdateValidator implements ConstraintValidator<UserEmailUp
         List<FieldMessage> fieldMessageList = new ArrayList<>();
 
         if(Objects.nonNull(userModel) && !Objects.equals(userModel.getId(), userIdRequest)){
-            fieldMessageList.add(new FieldMessage(null, "E-mail já cadastrado pra outro usuário"));
+            fieldMessageList.add(new FieldMessage(null, "E-mail já cadastrado para outro usuário"));
         }
 
         for (FieldMessage fieldMessage : fieldMessageList) {

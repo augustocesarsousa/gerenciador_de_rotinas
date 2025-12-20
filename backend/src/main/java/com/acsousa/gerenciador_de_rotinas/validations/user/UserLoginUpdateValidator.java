@@ -34,7 +34,7 @@ public class UserLoginUpdateValidator implements ConstraintValidator<UserLoginUp
         List<FieldMessage> fieldMessageList = new ArrayList<>();
 
         if(Objects.nonNull(userModel) && !Objects.equals(userModel.getId(), userIdRequest)){
-            fieldMessageList.add(new FieldMessage(null, "Login já cadastrado pra outro usuário"));
+            fieldMessageList.add(new FieldMessage(null, "Login já cadastrado para outro usuário"));
         }
 
         for (FieldMessage fieldMessage : fieldMessageList) {

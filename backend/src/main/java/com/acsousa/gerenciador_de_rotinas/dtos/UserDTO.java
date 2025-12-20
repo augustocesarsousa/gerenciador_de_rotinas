@@ -34,7 +34,7 @@ public class UserDTO implements Serializable {
     private String login;
 
     @JsonView({Views.Create.class, Views.Update.class})
-    @NotBlank(message = "Senha é obrigatória", groups = {Views.Create.class, Views.Update.class})
+    @NotBlank(message = "Senha é obrigatória", groups = {Views.Create.class})
     private String password;
 
     @JsonView({Views.Create.class, Views.Find.class, Views.Update.class})
