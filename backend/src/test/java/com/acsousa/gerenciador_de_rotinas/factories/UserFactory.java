@@ -1,7 +1,6 @@
 package com.acsousa.gerenciador_de_rotinas.factories;
 
 import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
-import com.acsousa.gerenciador_de_rotinas.enums.UserProfile;
 import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
 import com.acsousa.gerenciador_de_rotinas.models.UserModel;
 import com.acsousa.gerenciador_de_rotinas.utils.mapper.ConvertMapper;
@@ -19,9 +18,7 @@ public class UserFactory {
         userModel.setPassword("1234");
         userModel.setEmail("hal.jordan@email.com");
         userModel.setStatus(UserStatus.ACTIVE);
-        userModel.setProfile(UserProfile.ADMIN);
-        userModel.setCreatedAt(LocalDateTime.of(2025,1,1,9,30));
-        userModel.setUpdatedAt(LocalDateTime.of(2025,1,1,9,30));
+        userModel.getRoles().add(RoleFactory.createRoleAdmin());
         userModel.setUserIdEdit(1L);
 
         return userModel;

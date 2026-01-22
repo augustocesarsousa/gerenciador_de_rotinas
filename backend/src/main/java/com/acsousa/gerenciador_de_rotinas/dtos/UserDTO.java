@@ -1,6 +1,5 @@
 package com.acsousa.gerenciador_de_rotinas.dtos;
 
-import com.acsousa.gerenciador_de_rotinas.enums.UserProfile;
 import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
 import com.acsousa.gerenciador_de_rotinas.utils.json.Views;
 import com.acsousa.gerenciador_de_rotinas.validations.user.*;
@@ -8,13 +7,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO implements Serializable {
     @Serial
@@ -48,7 +52,7 @@ public class UserDTO implements Serializable {
     private UserStatus status;
 
     @JsonView({Views.Create.class, Views.Find.class, Views.Update.class})
-    private UserProfile profile;
+    private Set<RoleDTO> roles = new HashSet<>();
 
     @JsonView({Views.Find.class})
     private LocalDateTime createdAt;

@@ -285,18 +285,6 @@ public class UserControllerPostTests {
     }
 
     @Test
-    public void createShouldReturnUnprocessableEntityWhenInvalidProfile() throws Exception {
-        String jsonBody = objectMapper.writeValueAsString(userDTO);
-        jsonBody = jsonBody.replace("ADMIN", "INVALID");
-
-        mockMvc.perform(post("/users")
-                        .content(jsonBody)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.message").value("O campo 'profile' possui um valor inválido."));
-    }
-
-    @Test
     public void createShouldReturnUnprocessableEntityWhenInvalidUserIdEdit() throws Exception {
         userDTO.setUserIdEdit(notExistingUserId);
         String jsonBody = objectMapper.writeValueAsString(userDTO);

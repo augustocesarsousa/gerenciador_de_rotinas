@@ -2,7 +2,6 @@ package com.acsousa.gerenciador_de_rotinas.controllers;
 
 import com.acsousa.gerenciador_de_rotinas.dtos.CustomPageDTO;
 import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
-import com.acsousa.gerenciador_de_rotinas.enums.UserProfile;
 import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
 import com.acsousa.gerenciador_de_rotinas.records.EnumRecord;
 import com.acsousa.gerenciador_de_rotinas.services.impl.UserServiceImpl;
@@ -25,7 +24,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
     @Autowired
     UserServiceImpl userService;
 
@@ -64,10 +62,5 @@ public class UserController {
     @GetMapping("/status")
     public ResponseEntity<List<EnumRecord>> getStatus() {
         return ResponseEntity.status(HttpStatus.OK).body(EnumUtil.convertEnumToList(UserStatus.class));
-    }
-
-    @GetMapping("/profiles")
-    public ResponseEntity<List<EnumRecord>> getProfiles() {
-        return ResponseEntity.status(HttpStatus.OK).body(EnumUtil.convertEnumToList(UserProfile.class));
     }
 }

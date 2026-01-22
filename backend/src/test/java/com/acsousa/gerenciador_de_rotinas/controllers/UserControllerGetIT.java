@@ -47,8 +47,7 @@ public class UserControllerGetIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").exists())
                 .andExpect(jsonPath("$.totalPages").value(1))
-                .andExpect(jsonPath("$.totalElements").value(5))
-                .andExpect(jsonPath("$.empty").value(false));
+                .andExpect(jsonPath("$.totalElements").value(6));
     }
 
     @Test
@@ -62,7 +61,8 @@ public class UserControllerGetIT {
                 .andExpect(jsonPath("$.content[2].name").value("Lex Luthor"))
                 .andExpect(jsonPath("$.content[3].name").value("Clark Kent"))
                 .andExpect(jsonPath("$.content[4].name").value("Bruce Wayne"))
-                .andExpect(jsonPath("$.totalElements").value(5));
+                .andExpect(jsonPath("$.content[5].name").value("Alfred"))
+                .andExpect(jsonPath("$.totalElements").value(6));
     }
 
     @Test

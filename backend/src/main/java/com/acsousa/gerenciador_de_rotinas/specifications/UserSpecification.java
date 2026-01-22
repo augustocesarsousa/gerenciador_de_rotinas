@@ -1,6 +1,5 @@
 package com.acsousa.gerenciador_de_rotinas.specifications;
 
-import com.acsousa.gerenciador_de_rotinas.enums.UserProfile;
 import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
 import com.acsousa.gerenciador_de_rotinas.models.UserModel;
 import org.springframework.data.jpa.domain.Specification;
@@ -49,15 +48,6 @@ public class UserSpecification {
                 return null;
             }
             return builder.equal(root.get("status"), status);
-        };
-    }
-
-    public static Specification<UserModel> profileEquals(UserProfile profile) {
-        return (root, query, builder) -> {
-            if(ObjectUtils.isEmpty(profile)) {
-                return null;
-            }
-            return builder.equal(root.get("profile"), profile);
         };
     }
 }

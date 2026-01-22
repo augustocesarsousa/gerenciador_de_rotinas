@@ -2,8 +2,11 @@ package com.acsousa.gerenciador_de_rotinas.services.impl;
 
 import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
 import com.acsousa.gerenciador_de_rotinas.exceptions.custom.ResourceNotFoundException;
+import com.acsousa.gerenciador_de_rotinas.factories.RoleFactory;
 import com.acsousa.gerenciador_de_rotinas.factories.UserFactory;
+import com.acsousa.gerenciador_de_rotinas.models.RoleModel;
 import com.acsousa.gerenciador_de_rotinas.models.UserModel;
+import com.acsousa.gerenciador_de_rotinas.repositories.RoleRepository;
 import com.acsousa.gerenciador_de_rotinas.repositories.UserRepository;
 import com.acsousa.gerenciador_de_rotinas.specifications.queryFilter.UserQueryFilter;
 import org.junit.jupiter.api.Assertions;
@@ -35,6 +38,9 @@ public class UserServiceImplTests {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private RoleRepository roleRepository;
+
     private UserDTO userValidDTO;
     private Long existingId;
     private Long notExistingId;
@@ -43,6 +49,7 @@ public class UserServiceImplTests {
     @BeforeEach
     void setUp() throws Exception {
         UserModel userModel = UserFactory.createUserModel();
+        RoleModel roleModel = RoleFactory.createRoleAdmin();
         userValidDTO = UserFactory.createValidUserDTO();
         existingId = 1L;
         notExistingId = 1000L;
@@ -52,6 +59,8 @@ public class UserServiceImplTests {
         when(userRepository.save(any())).thenReturn(userModel);
         when(userRepository.findById(existingId)).thenReturn(Optional.of(userModel));
         when(userRepository.findAll((Specification<UserModel>) any(), (Pageable) any())).thenReturn(userModelPage);
+
+        when(roleRepository.findById(existingId)).thenReturn(Optional.of(roleModel));
     }
 
     @Test

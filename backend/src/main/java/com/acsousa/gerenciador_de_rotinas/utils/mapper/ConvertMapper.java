@@ -19,7 +19,7 @@ public class ConvertMapper {
         List<D> destinationObjects = new ArrayList<>();
 
         for(Object object : origin) {
-            destinationObjects.add(mapper.map(origin, destination));
+            destinationObjects.add(mapper.map(object, destination));
         }
 
         return destinationObjects;
