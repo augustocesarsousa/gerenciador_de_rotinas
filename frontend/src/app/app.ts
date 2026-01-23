@@ -5,7 +5,6 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, MatSlideToggleModule],
-  template: ` <router-outlet />
-    <p>Frontent iniciado</p>`,
+  template: ` <router-outlet />`,
 })
 export class App {}
