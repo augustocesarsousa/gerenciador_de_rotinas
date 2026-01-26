@@ -10,7 +10,7 @@ export const routes: Routes = [
       { path: '', component: ContentComponent },
       {
         path: 'users',
-        component: ContentComponent,
+        loadChildren: () => import('./features/user/user.routes').then((u) => u.routes),
       },
       { path: 'finance/cadastros', component: ContentComponent },
       { path: 'finance/fluxo', component: ContentComponent },
