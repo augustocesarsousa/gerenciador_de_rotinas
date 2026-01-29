@@ -3,7 +3,7 @@
   <!-- Form -->
   <form
     [formGroup]="searchForm"
-    (ngSubmit)="findAllUsers()"
+    (ngSubmit)="getAllUsers()"
     class="grid grid-cols-1 gap-4 lg:grid-cols-5"
   >
     <mat-form-field appearance="outline">
@@ -41,6 +41,7 @@
       </button>
       <button
         mat-flat-button
+        [routerLink]="['/users/create']"
         class="w-full h-full bg-green-700! text-white! shadow-md! hover:bg-green-900! hover:shadow-lg! transition duration-200 ease-in-out"
       >
         <mat-icon>person_add</mat-icon>
@@ -87,11 +88,13 @@
       ></tr>
     </table>
     <!-- Pagination -->
-    <div class="w-full min-w-100">
+    <div class="w-full min-w-150">
       <mat-paginator
-        [length]="totalUsers"
-        [pageSize]="10"
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
         [pageSizeOptions]="[10, 20, 50]"
+        (page)="onPageChange($event)"
       ></mat-paginator>
     </div>
   </div>

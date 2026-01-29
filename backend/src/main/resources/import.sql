@@ -1,8 +1,8 @@
 INSERT INTO tb_role (authority, description) VALUES ('ROLE_ADMIN', 'Administrador');
 INSERT INTO tb_role (authority, description) VALUES ('ROLE_FINANCIAL_MANAGER', 'Gerente Financeiro');
-INSERT INTO tb_role (authority, description) VALUES ('ROLE_FINANCIAL_ASSISTENT', 'Assistente Financeiro');
+INSERT INTO tb_role (authority, description) VALUES ('ROLE_FINANCIAL_ASSISTANT', 'Assistente Financeiro');
 INSERT INTO tb_role (authority, description) VALUES ('ROLE_ADMINISTRATIVE_MANAGER', 'Gerente Administrativo');
-INSERT INTO tb_role (authority, description) VALUES ('ROLE_ADMINISTRATIVE_ASSISTENT', 'Assistente Administrativo');
+INSERT INTO tb_role (authority, description) VALUES ('ROLE_ADMINISTRATIVE_ASSISTANT', 'Assistente Administrativo');
 
 INSERT INTO tb_user (name, login, password, email, status, created_at, updated_at, user_id_edit) VALUES ('Bruce Wayne', 'batman', '1234', 'bruce.wayne@email.com', 0, '2025-01-01 00:00:00.000000', '2025-01-01 00:00:00.000000', 1);
 INSERT INTO tb_user (name, login, password, email, status, created_at, updated_at, user_id_edit) VALUES ('Clark Kent', 'superman', '1234', 'clark.kent@email.com', 0, '2025-01-01 00:00:00.000000', '2025-01-01 00:00:00.000000', 1);

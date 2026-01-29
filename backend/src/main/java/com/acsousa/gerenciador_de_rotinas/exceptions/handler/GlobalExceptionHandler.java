@@ -4,6 +4,7 @@ import com.acsousa.gerenciador_de_rotinas.exceptions.custom.AttributeAlreadyExis
 import com.acsousa.gerenciador_de_rotinas.exceptions.custom.ResourceNotFoundException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -81,6 +82,20 @@ public class GlobalExceptionHandler {
         standardError.setStatus(httpStatus.value());
         standardError.setError("Request error");
         standardError.setMessage(message);
+        standardError.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(httpStatus).body(standardError);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> databaseViolation(DataIntegrityViolationException e, HttpServletRequest request) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        StandardError standardError = new StandardError();
+
+        standardError.setTimestamp(Instant.now());
+        standardError.setStatus(httpStatus.value());
+        standardError.setError("Database violation error");
+        standardError.setMessage(e.getMessage());
         standardError.setPath(request.getRequestURI());
 
         return ResponseEntity.status(httpStatus).body(standardError);

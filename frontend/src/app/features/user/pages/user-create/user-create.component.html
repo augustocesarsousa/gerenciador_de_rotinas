@@ -1,0 +1,81 @@
+<div class="p-6 max-w-100">
+  <h1 class="text-2xl font-bold mb-6">Cadastro de usuário</h1>
+
+  <form [formGroup]="userCreateForm" class="grid grid-cols-1 gap-4">
+    <!-- Nome -->
+    <mat-form-field appearance="outline">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" type="text" />
+      @if (userCreateForm.get('name')?.hasError('required')) {
+        <mat-error> Nome é obrigatório </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Login -->
+    <mat-form-field appearance="outline">
+      <mat-label>Login</mat-label>
+      <input matInput formControlName="login" type="text" />
+      @if (userCreateForm.get('login')?.hasError('required')) {
+        <mat-error> Login é obrigatório </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Senha -->
+    <mat-form-field appearance="outline">
+      <mat-label>Senha</mat-label>
+      <input matInput formControlName="password" type="password" />
+      @if (userCreateForm.get('password')?.hasError('required')) {
+        <mat-error> Senha é obrigatória </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- E-mail -->
+    <mat-form-field appearance="outline">
+      <mat-label>E-mail</mat-label>
+      <input matInput formControlName="email" type="text" />
+      @if (userCreateForm.get('email')?.hasError('required')) {
+        <mat-error> E-mail é obrigatório </mat-error>
+      }
+      @if (userCreateForm.get('email')?.hasError('email')) {
+        <mat-error> E-mail inválido </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Perfil -->
+    <mat-form-field appearance="outline">
+      <mat-label>Perfil</mat-label>
+      <mat-select formControlName="roles" multiple>
+        @for (role of roles; track role.id) {
+          <mat-option [value]="role.id">
+            {{ role.description }}
+          </mat-option>
+        }
+      </mat-select>
+      @if (userCreateForm.get('roles')?.hasError('required')) {
+        <mat-error> Perfil é obrigatório </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Botões -->
+    <div class="flex items-start gap-2">
+      <button
+        mat-flat-button
+        class="mt-2 w-full bg-green-600! text-white! hover:bg-green-900!"
+        (click)="createUser()"
+        [disabled]="userCreateForm.invalid"
+      >
+        <mat-icon>save</mat-icon>
+        Salvar
+      </button>
+
+      <button
+        mat-flat-button
+        class="mt-2 w-full bg-red-600! hover:bg-red-900!"
+        (click)="returnToUserSearch()"
+      >
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,7 +1,7 @@
 package com.acsousa.gerenciador_de_rotinas.controllers;
 
 import com.acsousa.gerenciador_de_rotinas.dtos.RoleDTO;
-import com.acsousa.gerenciador_de_rotinas.services.RoleService;
+import com.acsousa.gerenciador_de_rotinas.services.impl.RoleServiceImpl;
 import com.acsousa.gerenciador_de_rotinas.utils.json.Views;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/users/roles")
 public class RoleController {
     @Autowired
-    private RoleService roleService;
+    private RoleServiceImpl roleService;
 
     @JsonView(Views.Find.class)
     @GetMapping

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -12,6 +12,7 @@ import { MatIcon } from '@angular/material/icon';
 import { UserService } from '../../services/user.service';
 import { IUser } from '../../interfaces/user.interface';
 import { StatusPipe } from '../../../../shared/pipes/status.pipe';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-search',
@@ -30,6 +31,7 @@ import { StatusPipe } from '../../../../shared/pipes/status.pipe';
     CommonModule,
     MatIcon,
     StatusPipe,
+    RouterLink,
   ],
 })
 export class UserSearchComponent implements OnInit {
@@ -37,7 +39,9 @@ export class UserSearchComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'login', 'email', 'status', 'editar'];
   usersTable = new MatTableDataSource<IUser>([]);
-  totalUsers = 0;
+  totalElements = 0;
+  pageSize = 10;
+  pageIndex = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -56,21 +60,27 @@ export class UserSearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.findAllUsers();
+    this.getAllUsers();
   }
 
   ngAfterViewInit() {
-    this.usersTable.paginator = this.paginator;
     this.usersTable.sort = this.sort;
   }
 
-  findAllUsers() {
+  getAllUsers() {
     const filters = this.searchForm.value;
-    const pageNumber = this.paginator ? this.paginator.pageIndex : 0;
-    const pageSize = this.paginator ? this.paginator.pageSize : 10;
 
-    this._userService.findAll(filters, pageNumber, pageSize).subscribe((findAllResponse) => {
-      this.usersTable.data = findAllResponse.content;
-    });
+    this._userService
+      .getAllUsers(filters, this.pageIndex, this.pageSize)
+      .subscribe((findAllResponse) => {
+        this.usersTable.data = findAllResponse.content;
+        this.totalElements = findAllResponse.totalElements;
+      });
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.getAllUsers();
   }
 }
