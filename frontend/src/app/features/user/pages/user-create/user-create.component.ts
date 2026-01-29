@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IRole } from '../../interfaces/role.interface';
+import { IUserRole } from '../../interfaces/user-role.interface';
 import { IUser } from '../../interfaces/user.interface';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatLabel, MatError, MatFormFieldModule } from '@angular/material/form-field';
@@ -43,7 +43,7 @@ export class UserCreateComponent implements OnInit {
   userCreateForm!: FormGroup;
   private readonly userIdEdit = 1;
 
-  roles: IRole[] = [];
+  userRoles: IUserRole[] = [];
 
   constructor(
     private _fb: FormBuilder,
@@ -68,7 +68,7 @@ export class UserCreateComponent implements OnInit {
   getUserRoles() {
     this._userService.getUserRoles().subscribe({
       next: (response) => {
-        this.roles = response;
+        this.userRoles = response;
       },
       error: (err) => {
         this._toastr.error('Ocorreu um erro ao carregar os perfis');

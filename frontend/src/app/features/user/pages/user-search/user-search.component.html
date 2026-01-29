@@ -26,8 +26,11 @@
       <mat-label>Status</mat-label>
       <mat-select formControlName="status">
         <mat-option value="">Selecionar...</mat-option>
-        <mat-option value="ACTIVE">Ativo</mat-option>
-        <mat-option value="INACTIVE">Inativo</mat-option>
+        @for (status of userStatus; track status.index) {
+          <mat-option [value]="status.value">
+            {{ status.description }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
     <div class="lg:col-span-2 lg:pt-2 flex items-start gap-2">

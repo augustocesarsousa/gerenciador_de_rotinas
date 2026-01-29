@@ -13,6 +13,8 @@ import { UserService } from '../../services/user.service';
 import { IUser } from '../../interfaces/user.interface';
 import { StatusPipe } from '../../../../shared/pipes/status.pipe';
 import { RouterLink } from '@angular/router';
+import { IUserStatus } from '../../interfaces/user-status.interface';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-search',
@@ -37,6 +39,8 @@ import { RouterLink } from '@angular/router';
 export class UserSearchComponent implements OnInit {
   searchForm!: FormGroup;
 
+  userStatus: IUserStatus[] = [];
+
   displayedColumns: string[] = ['id', 'name', 'login', 'email', 'status', 'editar'];
   usersTable = new MatTableDataSource<IUser>([]);
   totalElements = 0;
@@ -49,6 +53,7 @@ export class UserSearchComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _userService: UserService,
+    private _toastr: ToastrService,
   ) {
     this.searchForm = this._fb.group({
       id: [''],
@@ -60,6 +65,7 @@ export class UserSearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getUserStatus();
     this.getAllUsers();
   }
 
@@ -67,15 +73,29 @@ export class UserSearchComponent implements OnInit {
     this.usersTable.sort = this.sort;
   }
 
+  getUserStatus() {
+    this._userService.getUserStatus().subscribe({
+      next: (response) => {
+        this.userStatus = response;
+      },
+      error: () => {
+        this._toastr.error('Ocorreu um erro ao carregar os status');
+      },
+    });
+  }
+
   getAllUsers() {
     const filters = this.searchForm.value;
 
-    this._userService
-      .getAllUsers(filters, this.pageIndex, this.pageSize)
-      .subscribe((findAllResponse) => {
-        this.usersTable.data = findAllResponse.content;
-        this.totalElements = findAllResponse.totalElements;
-      });
+    this._userService.getAllUsers(filters, this.pageIndex, this.pageSize).subscribe({
+      next: (response) => {
+        this.usersTable.data = response.content;
+        this.totalElements = response.totalElements;
+      },
+      error: () => {
+        this._toastr.error('Ocorreu um erro ao carregar os status');
+      },
+    });
   }
 
   onPageChange(event: PageEvent) {

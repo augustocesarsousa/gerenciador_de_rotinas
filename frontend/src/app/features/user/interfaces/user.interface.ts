@@ -1,4 +1,4 @@
-import { IRole } from './role.interface';
+import { IUserRole } from './user-role.interface';
 
 export interface IUser {
   id?: number;
@@ -7,7 +7,7 @@ export interface IUser {
   email: string;
   password: string;
   status?: string;
-  roles: IRole[];
+  roles: IUserRole[];
   createdAt?: Date;
   updatedAt?: Date;
   userIdEdit: number;

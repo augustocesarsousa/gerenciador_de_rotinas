@@ -5,7 +5,8 @@ import { Observable } from 'rxjs';
 import { IPage } from '../../../shared/interfaces/page.interface';
 import { IUser } from '../interfaces/user.interface';
 import { HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
-import { IRole } from '../interfaces/role.interface';
+import { IUserRole } from '../interfaces/user-role.interface';
+import { IUserStatus } from '../interfaces/user-status.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -26,8 +27,12 @@ export class UserService {
     return this._apiService.get<IPage<IUser>>('users', { params });
   }
 
-  getUserRoles(): Observable<IRole[]> {
-    return this._apiService.get<IRole[]>('users/roles');
+  getUserStatus(): Observable<IUserStatus[]> {
+    return this._apiService.get<IUserStatus[]>('users/status');
+  }
+
+  getUserRoles(): Observable<IUserRole[]> {
+    return this._apiService.get<IUserRole[]>('users/roles');
   }
 
   createUser(user: IUser): Observable<HttpResponse<any>> {

@@ -45,7 +45,7 @@
     <mat-form-field appearance="outline">
       <mat-label>Perfil</mat-label>
       <mat-select formControlName="roles" multiple>
-        @for (role of roles; track role.id) {
+        @for (role of userRoles; track role.id) {
           <mat-option [value]="role.id">
             {{ role.description }}
           </mat-option>
