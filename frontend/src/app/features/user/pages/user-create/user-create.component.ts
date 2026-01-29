@@ -49,7 +49,6 @@ export class UserCreateComponent implements OnInit {
     private _fb: FormBuilder,
     private _router: Router,
     private _userService: UserService,
-    private _snackBar: MatSnackBar,
     private _toastr: ToastrService,
   ) {
     this.userCreateForm = this._fb.group({
@@ -70,8 +69,9 @@ export class UserCreateComponent implements OnInit {
       next: (response) => {
         this.userRoles = response;
       },
-      error: (err) => {
+      error: () => {
         this._toastr.error('Ocorreu um erro ao carregar os perfis');
+        this.returnToUserSearch();
       },
     });
   }
@@ -97,10 +97,8 @@ export class UserCreateComponent implements OnInit {
         },
         error: (err) => {
           if (err.status === 500) {
-            this._snackBar.open('Ocorreu um erro, contate o administrador do sistema', 'Fechar', {
-              duration: 4000,
-              panelClass: ['bg-red-600!', 'text-white!'],
-            });
+            this._toastr.error('Ocorreu um erro, contate o administrador do sistema');
+            this.returnToUserSearch();
           } else if (err.status === 422 && err.error?.errors) {
             err.error.errors.forEach((validationError: any) => {
               this._toastr.error(validationError.message);

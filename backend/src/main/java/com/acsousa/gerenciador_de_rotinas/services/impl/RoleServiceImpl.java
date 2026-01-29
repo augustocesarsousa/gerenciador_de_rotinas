@@ -18,7 +18,6 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<RoleDTO> findAll() {
         List<RoleModel> roleModelList = roleRepository.findAll();
-        System.out.println(roleModelList);
         return ConvertMapper.convertListOfObjects(roleModelList, RoleDTO.class);
     }
 }

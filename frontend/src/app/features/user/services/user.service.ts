@@ -14,6 +14,10 @@ import { IUserStatus } from '../interfaces/user-status.interface';
 export class UserService {
   constructor(private _apiService: ApiService) {}
 
+  getUserById(userId: string): Observable<IUser> {
+    return this._apiService.get<IUser>('users/' + userId);
+  }
+
   getAllUsers(filters: UserFilter, page: number = 0, size: number = 10): Observable<IPage<IUser>> {
     let params = new HttpParams().set('page', page).set('size', size);
 
@@ -46,5 +50,18 @@ export class UserService {
     };
 
     return this._apiService.post('users', body, options);
+  }
+
+  editUser(userId: string, user: IUser): Observable<HttpResponse<any>> {
+    const body = JSON.stringify(user, (key, value) => {
+      return value === null || value === undefined ? undefined : value;
+    });
+
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      observe: 'response' as const,
+    };
+
+    return this._apiService.put('users/' + userId, body, options);
   }
 }

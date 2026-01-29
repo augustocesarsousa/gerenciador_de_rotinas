@@ -17,8 +17,8 @@ export class ApiService {
     return this.http.post<T>(`${this.apiUrl}/${endpoint}`, body, options);
   }
 
-  put<T>(endpoint: string, body: any) {
-    return this.http.put<T>(`${this.apiUrl}/${endpoint}`, body);
+  put<T>(endpoint: string, body: any, options?: object) {
+    return this.http.put<T>(`${this.apiUrl}/${endpoint}`, body, options);
   }
 
   delete<T>(endpoint: string) {
