@@ -24,7 +24,8 @@ public class RoleController {
     @JsonView(Views.Find.class)
     @GetMapping
     public ResponseEntity<List<RoleDTO>> findAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(roleService.findAll());
+        List<RoleDTO> roleDTOList = roleService.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(roleDTOList);
     }
 
 }

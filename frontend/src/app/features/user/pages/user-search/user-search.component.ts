@@ -93,7 +93,7 @@ export class UserSearchComponent implements OnInit {
         this.totalElements = response.totalElements;
       },
       error: () => {
-        this._toastr.error('Ocorreu um erro ao carregar os status');
+        this._toastr.error('Ocorreu um erro ao carregar os usuários');
       },
     });
   }
