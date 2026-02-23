@@ -10,7 +10,6 @@ import { By } from '@angular/platform-browser';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { IUser } from '../../interfaces/user.interface';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 describe('UserSearchComponent', () => {
   let component: UserSearchComponent;
