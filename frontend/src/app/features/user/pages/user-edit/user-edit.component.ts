@@ -75,7 +75,6 @@ export class UserEditComponent implements OnInit {
       next: (response) => {
         this.userEdit = response;
         this.userLoaded = true;
-        console.log(this.userEdit);
         this.tryBuildForm();
       },
       error: (err) => {
@@ -95,7 +94,6 @@ export class UserEditComponent implements OnInit {
       next: (response) => {
         this.userStatus = response;
         this.statusLoaded = true;
-        console.log(this.userStatus);
         this.tryBuildForm();
       },
       error: () => {
@@ -110,7 +108,6 @@ export class UserEditComponent implements OnInit {
       next: (response) => {
         this.userRoles = response;
         this.rolesLoaded = true;
-        console.log(this.userRoles);
         this.tryBuildForm();
       },
       error: () => {
