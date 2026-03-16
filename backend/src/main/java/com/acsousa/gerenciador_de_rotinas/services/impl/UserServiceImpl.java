@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -84,6 +85,7 @@ public class UserServiceImpl implements UserService {
                         () -> new ResourceNotFoundException("Role não encontrada: " + roleDTO.getId()));
 
                 userModelToUpdate.getRoles().add(roleFound);
+                userModelToUpdate.setUpdatedAt(LocalDateTime.now());
             });
         }
 

@@ -54,7 +54,6 @@ public class UserModel implements Serializable {
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    @Setter(AccessLevel.NONE)
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)

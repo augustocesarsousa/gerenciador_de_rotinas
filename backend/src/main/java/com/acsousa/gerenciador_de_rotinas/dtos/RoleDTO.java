@@ -23,4 +23,9 @@ public class RoleDTO implements Serializable {
 
     @JsonView({Views.Find.class})
     private String description;
+
+    @Override
+    public String toString() {
+        return "RoleModel{id=" + id + ", authority='" + authority + "'}";
+    }
 }
