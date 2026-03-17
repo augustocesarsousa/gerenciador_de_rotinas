@@ -25,6 +25,7 @@ public class RoleController {
     @GetMapping
     public ResponseEntity<List<RoleDTO>> findAll() {
         List<RoleDTO> roleDTOList = roleService.findAll();
+        System.out.println(roleDTOList);
         return ResponseEntity.status(HttpStatus.OK).body(roleDTOList);
     }
 

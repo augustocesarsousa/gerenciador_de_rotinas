@@ -72,6 +72,7 @@
           mat-flat-button
           class="mt-2 w-full bg-green-600! text-white! hover:bg-green-900!"
           (click)="editUser()"
+          [disabled]="userEditForm.invalid"
         >
           <mat-icon>save</mat-icon>
           Salvar
