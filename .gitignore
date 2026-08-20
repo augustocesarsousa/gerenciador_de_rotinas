@@ -3,3 +3,8 @@
 
 # Ignorar arquivos temporários do Word (terminam com #)
 *.docx#
+
+# Antigravity AI Engine & Local Agent Execution
+.agents/
+.agy/
+*.agent.tmp

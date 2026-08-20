@@ -5,8 +5,6 @@ import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
 import com.acsousa.gerenciador_de_rotinas.models.UserModel;
 import com.acsousa.gerenciador_de_rotinas.utils.mapper.ConvertMapper;
 
-import java.time.LocalDateTime;
-
 public class UserFactory {
 
     public static UserModel createUserModel() {

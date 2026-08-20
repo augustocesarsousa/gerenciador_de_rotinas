@@ -1,7 +1,6 @@
 package com.acsousa.gerenciador_de_rotinas.validations.user;
 
 import com.acsousa.gerenciador_de_rotinas.exceptions.handler.FieldMessage;
-import com.acsousa.gerenciador_de_rotinas.models.UserModel;
 import com.acsousa.gerenciador_de_rotinas.repositories.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -24,7 +23,7 @@ public class UserEmailCreateValidator implements ConstraintValidator<UserEmailCr
     public boolean isValid(String email, ConstraintValidatorContext context) {
         List<FieldMessage> fieldMessageList = new ArrayList<>();
 
-        if(Objects.nonNull(userRepository.findByEmail(email))){
+        if (Objects.nonNull(userRepository.findByEmail(email))) {
             fieldMessageList.add(new FieldMessage(null, "E-mail já cadastrado para outro usuário"));
         }
 
