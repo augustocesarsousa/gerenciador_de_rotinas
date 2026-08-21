@@ -2,7 +2,7 @@ package com.acsousa.gerenciador_de_rotinas.services.impl;
 
 import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
 import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
-import com.acsousa.gerenciador_de_rotinas.exceptions.custom.ResourceNotFoundException;
+import com.acsousa.gerenciador_de_rotinas.common.exceptions.ResourceNotFoundException;
 import com.acsousa.gerenciador_de_rotinas.factories.UserFactory;
 import com.acsousa.gerenciador_de_rotinas.specifications.queryFilter.UserQueryFilter;
 import org.junit.jupiter.api.Assertions;

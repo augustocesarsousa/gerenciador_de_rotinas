@@ -8,3 +8,6 @@
 .agents/
 .agy/
 *.agent.tmp
+
+# Implementation plan md
+.implementation_plan

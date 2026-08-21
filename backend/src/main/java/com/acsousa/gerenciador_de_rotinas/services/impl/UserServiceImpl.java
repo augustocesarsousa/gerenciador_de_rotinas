@@ -2,13 +2,13 @@ package com.acsousa.gerenciador_de_rotinas.services.impl;
 
 import com.acsousa.gerenciador_de_rotinas.dtos.RoleDTO;
 import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
-import com.acsousa.gerenciador_de_rotinas.exceptions.custom.ResourceNotFoundException;
+import com.acsousa.gerenciador_de_rotinas.common.exceptions.ResourceNotFoundException;
 import com.acsousa.gerenciador_de_rotinas.models.RoleModel;
 import com.acsousa.gerenciador_de_rotinas.models.UserModel;
 import com.acsousa.gerenciador_de_rotinas.repositories.RoleRepository;
 import com.acsousa.gerenciador_de_rotinas.repositories.UserRepository;
 import com.acsousa.gerenciador_de_rotinas.services.UserService;
-import com.acsousa.gerenciador_de_rotinas.utils.mapper.ConvertMapper;
+import com.acsousa.gerenciador_de_rotinas.common.utils.ConvertMapper;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

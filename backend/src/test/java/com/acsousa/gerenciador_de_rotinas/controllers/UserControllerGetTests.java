@@ -1,7 +1,7 @@
 package com.acsousa.gerenciador_de_rotinas.controllers;
 
 import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
-import com.acsousa.gerenciador_de_rotinas.exceptions.custom.ResourceNotFoundException;
+import com.acsousa.gerenciador_de_rotinas.common.exceptions.ResourceNotFoundException;
 import com.acsousa.gerenciador_de_rotinas.factories.UserFactory;
 import com.acsousa.gerenciador_de_rotinas.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;

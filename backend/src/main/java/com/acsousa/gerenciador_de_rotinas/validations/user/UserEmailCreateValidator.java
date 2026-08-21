@@ -1,13 +1,10 @@
 package com.acsousa.gerenciador_de_rotinas.validations.user;
 
-import com.acsousa.gerenciador_de_rotinas.exceptions.handler.FieldMessage;
 import com.acsousa.gerenciador_de_rotinas.repositories.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class UserEmailCreateValidator implements ConstraintValidator<UserEmailCreateValid, String> {
@@ -21,19 +18,12 @@ public class UserEmailCreateValidator implements ConstraintValidator<UserEmailCr
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
-        List<FieldMessage> fieldMessageList = new ArrayList<>();
-
         if (Objects.nonNull(userRepository.findByEmail(email))) {
-            fieldMessageList.add(new FieldMessage(null, "E-mail já cadastrado para outro usuário"));
-        }
-
-        for (FieldMessage fieldMessage : fieldMessageList) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(fieldMessage.getMessage())
-                    .addPropertyNode(fieldMessage.getFieldName())
+            context.buildConstraintViolationWithTemplate("E-mail já cadastrado para outro usuário")
                     .addConstraintViolation();
+            return false;
         }
-
-        return fieldMessageList.isEmpty();
+        return true;
     }
 }

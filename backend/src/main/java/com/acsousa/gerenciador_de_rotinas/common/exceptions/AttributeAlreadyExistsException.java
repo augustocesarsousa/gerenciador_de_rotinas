@@ -1,4 +1,4 @@
-package com.acsousa.gerenciador_de_rotinas.exceptions.custom;
+package com.acsousa.gerenciador_de_rotinas.common.exceptions;
 
 import java.io.Serial;
 

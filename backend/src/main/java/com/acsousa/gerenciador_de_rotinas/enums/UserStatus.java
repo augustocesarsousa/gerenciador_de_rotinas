@@ -1,5 +1,6 @@
 package com.acsousa.gerenciador_de_rotinas.enums;
 
+import com.acsousa.gerenciador_de_rotinas.common.enums.DescribableEnum;
 import lombok.Getter;
 
 @Getter

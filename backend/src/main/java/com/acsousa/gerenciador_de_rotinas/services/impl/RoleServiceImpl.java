@@ -4,7 +4,7 @@ import com.acsousa.gerenciador_de_rotinas.dtos.RoleDTO;
 import com.acsousa.gerenciador_de_rotinas.models.RoleModel;
 import com.acsousa.gerenciador_de_rotinas.repositories.RoleRepository;
 import com.acsousa.gerenciador_de_rotinas.services.RoleService;
-import com.acsousa.gerenciador_de_rotinas.utils.mapper.ConvertMapper;
+import com.acsousa.gerenciador_de_rotinas.common.utils.ConvertMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

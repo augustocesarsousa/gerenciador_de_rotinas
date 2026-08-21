@@ -1,4 +1,4 @@
-package com.acsousa.gerenciador_de_rotinas.utils.mapper;
+package com.acsousa.gerenciador_de_rotinas.common.utils;
 
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
@@ -18,7 +18,7 @@ public class ConvertMapper {
     public static <O, D> List<D> convertListOfObjects(List<O> origin, Class<D> destination) {
         List<D> destinationObjects = new ArrayList<>();
 
-        for(Object object : origin) {
+        for (Object object : origin) {
             destinationObjects.add(mapper.map(object, destination));
         }
 
