@@ -1,4 +1,4 @@
-package com.acsousa.gerenciador_de_rotinas.models;
+package com.acsousa.gerenciador_de_rotinas.domain.role.models;
 
 import com.acsousa.gerenciador_de_rotinas.factories.RoleFactory;
 import org.junit.jupiter.api.Assertions;
@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class RoleModelTests {
 
     @Test
-    public void createRoleModel() {
+    public void shouldCreateRoleModelWhenValidData() {
         RoleModel roleModel = RoleFactory.createRoleAdmin();
 
         Assertions.assertNotNull(roleModel);

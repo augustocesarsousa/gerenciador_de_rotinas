@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -28,6 +30,7 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle("Resource not found");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("message", e.getMessage()); // Compatibilidade com StandardError legada
         return problemDetail;
     }
 
@@ -38,22 +41,29 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle("Existing attribute");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("message", e.getMessage()); // Compatibilidade com StandardError legada
         return problemDetail;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail validationConstraints(MethodArgumentNotValidException e, HttpServletRequest request) {
         log.warn("Erro de validação nos campos: {}", e.getMessage());
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, "Erro de validação nos campos informados.");
+        String defaultDetail = "Erro de validação nos campos informados.";
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, defaultDetail);
         problemDetail.setTitle("Validation exception");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("message", defaultDetail); // Compatibilidade com StandardError legada
 
-        Map<String, String> errors = new HashMap<>();
+        // Lista de objetos com fieldName e message para compatibilidade com ValidationError/FieldMessage
+        List<Map<String, String>> errorList = new ArrayList<>();
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+            Map<String, String> err = new HashMap<>();
+            err.put("fieldName", fieldError.getField());
+            err.put("message", fieldError.getDefaultMessage());
+            errorList.add(err);
         }
-        problemDetail.setProperty("errors", errors);
+        problemDetail.setProperty("errors", errorList);
 
         return problemDetail;
     }
@@ -74,6 +84,7 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle("Request error");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("message", message); // Compatibilidade com StandardError legada
         return problemDetail;
     }
 
@@ -84,6 +95,7 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle("Database violation error");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("message", e.getMessage()); // Compatibilidade com StandardError legada
         return problemDetail;
     }
 }

@@ -1,8 +1,8 @@
-package com.acsousa.gerenciador_de_rotinas.controllers;
+package com.acsousa.gerenciador_de_rotinas.domain.role.controllers;
 
-import com.acsousa.gerenciador_de_rotinas.dtos.RoleDTO;
+import com.acsousa.gerenciador_de_rotinas.domain.role.records.RoleResponseRecord;
+import com.acsousa.gerenciador_de_rotinas.domain.role.services.RoleService;
 import com.acsousa.gerenciador_de_rotinas.factories.RoleFactory;
-import com.acsousa.gerenciador_de_rotinas.services.impl.RoleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,22 +25,21 @@ public class RoleControllerGetTests {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private RoleServiceImpl roleService;
+    private RoleService roleService;
 
     @BeforeEach
     void setUp() throws Exception {
-        RoleDTO roleDTO = RoleFactory.createRoleAdminDTO();
+        RoleResponseRecord roleResponseRecord = RoleFactory.createRoleAdminResponseRecord();
 
-        when(roleService.findAll()).thenReturn(List.of(roleDTO));
+        when(roleService.findAll()).thenReturn(List.of(roleResponseRecord));
     }
 
     @Test
-    public void findAllShouldReturnList() throws Exception {
+    public void shouldReturnListWhenFindAll() throws Exception {
         mockMvc.perform(get("/users/roles"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id").value(1))
                 .andExpect(jsonPath("$.[0].authority").value("ROLE_ADMIN"))
                 .andExpect(jsonPath("$.[0].description").value("Administrador"));
     }
-
 }

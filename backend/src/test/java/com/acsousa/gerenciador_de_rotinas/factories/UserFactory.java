@@ -3,7 +3,7 @@ package com.acsousa.gerenciador_de_rotinas.factories;
 import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
 import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
 import com.acsousa.gerenciador_de_rotinas.models.UserModel;
-import com.acsousa.gerenciador_de_rotinas.utils.mapper.ConvertMapper;
+import com.acsousa.gerenciador_de_rotinas.common.utils.ConvertMapper;
 
 public class UserFactory {
 

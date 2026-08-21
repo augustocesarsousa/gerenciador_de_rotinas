@@ -1,8 +1,7 @@
 package com.acsousa.gerenciador_de_rotinas.factories;
 
-import com.acsousa.gerenciador_de_rotinas.dtos.RoleDTO;
-import com.acsousa.gerenciador_de_rotinas.models.RoleModel;
-import com.acsousa.gerenciador_de_rotinas.utils.mapper.ConvertMapper;
+import com.acsousa.gerenciador_de_rotinas.domain.role.models.RoleModel;
+import com.acsousa.gerenciador_de_rotinas.domain.role.records.RoleResponseRecord;
 
 public class RoleFactory {
 
@@ -16,7 +15,7 @@ public class RoleFactory {
         return roleModel;
     }
 
-    public static RoleDTO createRoleAdminDTO() {
-        return ConvertMapper.convertObject(createRoleAdmin(), RoleDTO.class);
+    public static RoleResponseRecord createRoleAdminResponseRecord() {
+        return RoleResponseRecord.fromEntity(createRoleAdmin());
     }
 }

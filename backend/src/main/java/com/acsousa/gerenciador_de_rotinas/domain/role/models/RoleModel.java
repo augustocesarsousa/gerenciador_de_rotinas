@@ -1,4 +1,4 @@
-package com.acsousa.gerenciador_de_rotinas.models;
+package com.acsousa.gerenciador_de_rotinas.domain.role.models;
 
 import jakarta.persistence.*;
 import lombok.*;

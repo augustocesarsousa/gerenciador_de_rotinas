@@ -1,6 +1,7 @@
 package com.acsousa.gerenciador_de_rotinas.models;
 
 import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.domain.role.models.RoleModel;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.acsousa.gerenciador_de_rotinas.controllers;
+package com.acsousa.gerenciador_de_rotinas.domain.role.controllers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +22,11 @@ public class RoleControllerGetIT {
     private MockMvc mockMvc;
 
     @Test
-    public void findAllShouldReturnList() throws Exception {
+    public void shouldReturnListWhenFindAll() throws Exception {
         mockMvc.perform(get("/users/roles").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[1].id").value(2))
                 .andExpect(jsonPath("$.[1].authority").value("ROLE_FINANCIAL_MANAGER"))
                 .andExpect(jsonPath("$.[1].description").value("Gerente Financeiro"));
     }
-
 }
