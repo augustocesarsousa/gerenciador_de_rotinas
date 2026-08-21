@@ -1,0 +1,61 @@
+<div class="flex flex-col justify-between h-screen">
+  <!-- Logo e título -->
+  <div class="p-4 text-center border-b border-gray-700">
+    <img src="images/logo.png" alt="Logo" class="mx-auto mb-2 w-22 h-22 rounded-full" />
+    <h1 class="text-lg font-bold">Gerenciador de Rotinas</h1>
+  </div>
+
+  <!-- Menu -->
+  <div class="flex-1 overflow-y-auto p-2">
+    <mat-accordion multi>
+      <!-- Cadastro -->
+      <mat-expansion-panel class="m-0! rounded-t-md! rounded-b-none!">
+        <mat-expansion-panel-header>
+          <mat-icon class="mr-2">add</mat-icon> <span>Cadastros</span>
+        </mat-expansion-panel-header>
+        <div class="pl-6">
+          <a mat-button routerLink="/users" class="flex items-center gap-2">
+            <mat-icon>person</mat-icon> Usuário
+          </a>
+        </div>
+      </mat-expansion-panel>
+      <!-- Financeiro -->
+      <mat-expansion-panel class="m-0! rounded-t-none! rounded-b-md!">
+        <mat-expansion-panel-header>
+          <mat-icon class="mr-2">account_balance</mat-icon> <span>Financeiro</span>
+        </mat-expansion-panel-header>
+        <div class="pl-0 flex flex-col gap-2">
+          <mat-expansion-panel class="m-0 border-none! shadow-none! rounded-none! bg-transparent!">
+            <mat-expansion-panel-header>
+              <mat-icon class="mr-2">add</mat-icon> <span>Cadastros</span>
+            </mat-expansion-panel-header>
+            <div class="flex flex-col gap-2 pl-6">
+              <a mat-button routerLink="/finance/menu1" class="flex items-center gap-2">
+                <mat-icon>menu</mat-icon> Menu1
+              </a>
+              <a mat-button routerLink="/finance/menu2" class="flex items-center gap-2">
+                <mat-icon>menu</mat-icon> Menu2
+              </a>
+            </div>
+          </mat-expansion-panel>
+          <a mat-button routerLink="/finance/fluxo" class="flex items-center gap-2 pl-6">
+            <mat-icon>bar_chart</mat-icon> Fluxo de Caixa
+          </a>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <!-- Usuário e sair -->
+  <div class="p-4 border-t border-gray-700 text-center flex flex-col items-center">
+    <p class="font-semibold mb-3">{{ username }}</p>
+    <button
+      mat-raised-button
+      (click)="logout()"
+      class="px-6 py-2 rounded-full bg-blue-600 text-white shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200 ease-in-out cursor-pointer gap-2 flex items-center"
+    >
+      <mat-icon inline>logout</mat-icon>
+      Sair
+    </button>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+package com.acsousa.gerenciador_de_rotinas.factories;
+
+import com.acsousa.gerenciador_de_rotinas.dtos.RoleDTO;
+import com.acsousa.gerenciador_de_rotinas.models.RoleModel;
+import com.acsousa.gerenciador_de_rotinas.utils.mapper.ConvertMapper;
+
+public class RoleFactory {
+
+    public static RoleModel createRoleAdmin() {
+        RoleModel roleModel = new RoleModel();
+
+        roleModel.setId(1L);
+        roleModel.setAuthority("ROLE_ADMIN");
+        roleModel.setDescription("Administrador");
+
+        return roleModel;
+    }
+
+    public static RoleDTO createRoleAdminDTO() {
+        return ConvertMapper.convertObject(createRoleAdmin(), RoleDTO.class);
+    }
+}
