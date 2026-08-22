@@ -3,13 +3,13 @@ package com.acsousa.gerenciador_de_rotinas.domain.user.validations;
 import com.acsousa.gerenciador_de_rotinas.domain.user.repositories.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
 
+@RequiredArgsConstructor
 public class UserLoginCreateValidator implements ConstraintValidator<UserLoginCreateValid, String> {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void initialize(UserLoginCreateValid constraintAnnotation) {

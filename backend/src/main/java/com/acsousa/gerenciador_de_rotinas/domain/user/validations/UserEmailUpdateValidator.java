@@ -5,18 +5,16 @@ import com.acsousa.gerenciador_de_rotinas.domain.user.repositories.UserRepositor
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.HandlerMapping;
 
 import java.util.Map;
 import java.util.Objects;
 
+@RequiredArgsConstructor
 public class UserEmailUpdateValidator implements ConstraintValidator<UserEmailUpdateValid, String> {
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private HttpServletRequest httpServletRequest;
+    private final UserRepository userRepository;
+    private final HttpServletRequest httpServletRequest;
 
     @Override
     public void initialize(UserEmailUpdateValid constraintAnnotation) {
@@ -25,6 +23,7 @@ public class UserEmailUpdateValidator implements ConstraintValidator<UserEmailUp
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
+        @SuppressWarnings("unchecked")
         Map<String, String> uriVars = (Map<String, String>) httpServletRequest.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         Long userIdRequest = Long.parseLong(uriVars.get("id"));
         UserModel userModel = userRepository.findByEmail(email);

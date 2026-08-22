@@ -3,11 +3,11 @@ package com.acsousa.gerenciador_de_rotinas.domain.user.validations;
 import com.acsousa.gerenciador_de_rotinas.domain.user.repositories.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class UserIdEditValidator implements ConstraintValidator<UserIdEditValid, Long> {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void initialize(UserIdEditValid constraintAnnotation) {
