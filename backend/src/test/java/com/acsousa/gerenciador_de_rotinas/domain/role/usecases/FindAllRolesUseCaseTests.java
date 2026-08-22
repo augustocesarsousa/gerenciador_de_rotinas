@@ -40,6 +40,6 @@ public class FindAllRolesUseCaseTests {
         Assertions.assertNotNull(roleResponseRecordList);
         Assertions.assertFalse(roleResponseRecordList.isEmpty());
         Assertions.assertEquals(1, roleResponseRecordList.size());
-        Assertions.assertEquals("ROLE_ADMIN", roleResponseRecordList.get(0).authority());
+        Assertions.assertEquals("Administrador", roleResponseRecordList.get(0).description());
     }
 }

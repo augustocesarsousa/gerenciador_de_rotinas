@@ -39,7 +39,6 @@ public class RoleControllerGetTests {
         mockMvc.perform(get("/users/roles"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id").value(1))
-                .andExpect(jsonPath("$.[0].authority").value("ROLE_ADMIN"))
                 .andExpect(jsonPath("$.[0].description").value("Administrador"));
     }
 }

@@ -37,6 +37,7 @@ public class FindAllUsersUseCaseTests {
     private Pageable pageable;
     private UserModel userModel;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     void setUp() {
         queryFilter = new UserQueryFilter();

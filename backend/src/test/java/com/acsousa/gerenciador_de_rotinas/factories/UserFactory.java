@@ -1,6 +1,5 @@
 package com.acsousa.gerenciador_de_rotinas.factories;
 
-import com.acsousa.gerenciador_de_rotinas.domain.role.records.RoleResponseRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserModel;
 import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserStatus;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserCreateRecord;
@@ -33,8 +32,7 @@ public class UserFactory {
                 "1234",
                 "hal.jordan@email.com",
                 Set.of(RoleFactory.createRoleAdminResponseRecord()),
-                1L
-        );
+                1L);
     }
 
     public static UserUpdateRecord createUserUpdateRecord() {
@@ -45,8 +43,7 @@ public class UserFactory {
                 "hal.jordan@email.com",
                 UserStatus.ACTIVE,
                 Set.of(RoleFactory.createRoleAdminResponseRecord()),
-                1L
-        );
+                1L);
     }
 
     public static UserResponseRecord createUserResponseRecord() {
