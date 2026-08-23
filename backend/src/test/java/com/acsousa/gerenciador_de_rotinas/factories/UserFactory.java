@@ -1,9 +1,12 @@
 package com.acsousa.gerenciador_de_rotinas.factories;
 
-import com.acsousa.gerenciador_de_rotinas.dtos.UserDTO;
-import com.acsousa.gerenciador_de_rotinas.enums.UserStatus;
-import com.acsousa.gerenciador_de_rotinas.models.UserModel;
-import com.acsousa.gerenciador_de_rotinas.utils.mapper.ConvertMapper;
+import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserModel;
+import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserCreateRecord;
+import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserResponseRecord;
+import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserUpdateRecord;
+
+import java.util.Set;
 
 public class UserFactory {
 
@@ -22,14 +25,28 @@ public class UserFactory {
         return userModel;
     }
 
-    public static UserDTO createValidUserDTO() {
-        UserDTO userDTO = ConvertMapper.convertObject(createUserModel(), UserDTO.class);
+    public static UserCreateRecord createUserCreateRecord() {
+        return new UserCreateRecord(
+                "Hal Jordan",
+                "lanterna.verde",
+                "1234",
+                "hal.jordan@email.com",
+                Set.of(RoleFactory.createRoleAdminResponseRecord()),
+                1L);
+    }
 
-        userDTO.setId(null);
-        userDTO.setStatus(null);
-        userDTO.setCreatedAt(null);
-        userDTO.setUpdatedAt(null);
+    public static UserUpdateRecord createUserUpdateRecord() {
+        return new UserUpdateRecord(
+                "Hal Jordan",
+                "lanterna.verde",
+                "1234",
+                "hal.jordan@email.com",
+                UserStatus.ACTIVE,
+                Set.of(RoleFactory.createRoleAdminResponseRecord()),
+                1L);
+    }
 
-        return userDTO;
+    public static UserResponseRecord createUserResponseRecord() {
+        return UserResponseRecord.fromEntity(createUserModel());
     }
 }

@@ -1,5 +1,5 @@
 export interface IUserRole {
   id: number;
-  authority: string;
+  authority?: string;
   description: string;
 }
