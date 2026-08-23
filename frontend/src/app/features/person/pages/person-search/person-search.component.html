@@ -1,0 +1,156 @@
+<div class="p-4 max-w-screen overflow-x-hidden">
+  <h1 class="text-xl font-bold mb-4 text-slate-800">Consulta de Pessoas</h1>
+  
+  <!-- Form -->
+  <form
+    [formGroup]="searchForm"
+    (ngSubmit)="getAllPersons()"
+    class="grid grid-cols-1 gap-4 lg:grid-cols-6"
+  >
+    <mat-form-field appearance="outline">
+      <mat-label>Id</mat-label>
+      <input matInput type="number" formControlName="id" />
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline" class="lg:col-span-2">
+      <mat-label>Nome ou Razão Social</mat-label>
+      <input matInput type="text" formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo</mat-label>
+      <mat-select formControlName="type">
+        <mat-option value="">Selecionar...</mat-option>
+        @for (type of personTypes; track type.index) {
+          <mat-option [value]="type.value">
+            {{ type.description }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="">Selecionar...</mat-option>
+        @for (status of personStatus; track status.index) {
+          <mat-option [value]="status.value">
+            {{ status.description }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (searchForm.get('type')?.value === 'PHYSICAL') {
+      <mat-form-field appearance="outline">
+        <mat-label>CPF</mat-label>
+        <input matInput type="text" formControlName="cpf" />
+      </mat-form-field>
+    }
+
+    @if (searchForm.get('type')?.value === 'LEGAL') {
+      <mat-form-field appearance="outline">
+        <mat-label>CNPJ</mat-label>
+        <input matInput type="text" formControlName="cnpj" />
+      </mat-form-field>
+    }
+
+    <div class="lg:col-span-2 lg:pt-2 flex items-start gap-2">
+      <button
+        mat-flat-button
+        type="submit"
+        class="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white shadow-md transition duration-200 ease-in-out flex items-center justify-center gap-1 rounded-md"
+      >
+        <mat-icon>search</mat-icon>
+        Pesquisar
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        [routerLink]="['/persons/create']"
+        class="w-full h-12 bg-emerald-600! hover:bg-emerald-700! text-white! shadow-md! transition duration-200 ease-in-out flex items-center justify-center gap-1 rounded-md"
+      >
+        <mat-icon>person_add</mat-icon>
+        Cadastrar
+      </button>
+    </div>
+  </form>
+
+  <!-- Table -->
+  <div class="mt-6 w-full overflow-x-auto rounded-lg border border-slate-200 shadow-sm bg-white">
+    <table mat-table [dataSource]="personsTable" matSort class="min-w-300 w-full">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-slate-700 font-semibold">Id</th>
+        <td mat-cell *matCellDef="let person" class="text-slate-600">{{ person.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-slate-700 font-semibold">Nome ou Razão Social</th>
+        <td mat-cell *matCellDef="let person" class="text-slate-800 font-medium">{{ person.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-slate-700 font-semibold">Tipo</th>
+        <td mat-cell *matCellDef="let person" class="text-slate-600">
+          {{ person.type === 'PHYSICAL' ? 'Física' : 'Jurídica' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="document">
+        <th mat-header-cell *matHeaderCellDef class="text-slate-700 font-semibold">CPF / CNPJ</th>
+        <td mat-cell *matCellDef="let person" class="text-slate-600 font-mono">
+          {{ (person.type === 'PHYSICAL' ? person.cpf : person.cnpj) | cpfCnpj }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-slate-700 font-semibold">E-mail</th>
+        <td mat-cell *matCellDef="let person" class="text-slate-600">{{ person.email || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-slate-700 font-semibold">Status</th>
+        <td mat-cell *matCellDef="let person">
+          <span
+            class="px-2 py-1 text-xs font-semibold rounded-full"
+            [ngClass]="{
+              'bg-green-100 text-green-800': person.status === 'ACTIVE',
+              'bg-red-100 text-red-800': person.status === 'INACTIVE'
+            }"
+          >
+            {{ person.status | user_status }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="editar">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let person" class="text-right">
+          <button mat-button color="primary" [routerLink]="['/persons/edit', person.id]" class="hover:bg-slate-50 rounded">
+            <mat-icon class="mr-1">edit</mat-icon>Editar
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-slate-50"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        [ngClass]="{ 'bg-red-50/50 hover:bg-red-50 transition': row.status === 'INACTIVE', 'hover:bg-slate-50 transition': row.status !== 'INACTIVE' }"
+        class="border-b border-slate-100"
+      ></tr>
+    </table>
+
+    <!-- Pagination -->
+    <div class="w-full min-w-150 border-t border-slate-150">
+      <mat-paginator
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[10, 20, 50]"
+        (page)="onPageChange($event)"
+        class="text-slate-600"
+      ></mat-paginator>
+    </div>
+  </div>
+</div>
