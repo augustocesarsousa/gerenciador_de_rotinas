@@ -1,7 +1,7 @@
 package com.acsousa.gerenciador_de_rotinas.domain.user.controllers;
 
 import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserModel;
-import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.common.enums.EntityStatus;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserResponseRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserUpdateRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.user.repositories.UserRepository;
@@ -68,7 +68,7 @@ public class UserControllerPutTests {
         when(userRepository.findByEmail(existingEmail)).thenReturn(new UserModel());
     }
 
-    private UserUpdateRecord updateWith(String name, String login, String password, String email, UserStatus status, Long userIdEdit) {
+    private UserUpdateRecord updateWith(String name, String login, String password, String email, EntityStatus status, Long userIdEdit) {
         return new UserUpdateRecord(
                 name,
                 login,
@@ -93,7 +93,7 @@ public class UserControllerPutTests {
 
     @Test
     public void shouldReturnUnprocessableEntityWhenNameIsBlank() throws Exception {
-        UserUpdateRecord record = updateWith("", "lanterna.verde", "1234", "hal.jordan@email.com", UserStatus.ACTIVE, 1L);
+        UserUpdateRecord record = updateWith("", "lanterna.verde", "1234", "hal.jordan@email.com", EntityStatus.ACTIVE, 1L);
         String jsonBody = objectMapper.writeValueAsString(record);
 
         mockMvc.perform(put("/users/{id}", existingUserId)
@@ -112,7 +112,7 @@ public class UserControllerPutTests {
 
     @Test
     public void shouldReturnUnprocessableEntityWhenNameIsNull() throws Exception {
-        UserUpdateRecord record = updateWith(null, "lanterna.verde", "1234", "hal.jordan@email.com", UserStatus.ACTIVE, 1L);
+        UserUpdateRecord record = updateWith(null, "lanterna.verde", "1234", "hal.jordan@email.com", EntityStatus.ACTIVE, 1L);
         String jsonBody = objectMapper.writeValueAsString(record);
 
         mockMvc.perform(put("/users/{id}", existingUserId)
@@ -131,7 +131,7 @@ public class UserControllerPutTests {
 
     @Test
     public void shouldReturnUnprocessableEntityWhenLoginIsBlank() throws Exception {
-        UserUpdateRecord record = updateWith("Hal Jordan", "", "1234", "hal.jordan@email.com", UserStatus.ACTIVE, 1L);
+        UserUpdateRecord record = updateWith("Hal Jordan", "", "1234", "hal.jordan@email.com", EntityStatus.ACTIVE, 1L);
         String jsonBody = objectMapper.writeValueAsString(record);
 
         mockMvc.perform(put("/users/{id}", existingUserId)
@@ -150,7 +150,7 @@ public class UserControllerPutTests {
 
     @Test
     public void shouldReturnUnprocessableEntityWhenLoginIsNull() throws Exception {
-        UserUpdateRecord record = updateWith("Hal Jordan", null, "1234", "hal.jordan@email.com", UserStatus.ACTIVE, 1L);
+        UserUpdateRecord record = updateWith("Hal Jordan", null, "1234", "hal.jordan@email.com", EntityStatus.ACTIVE, 1L);
         String jsonBody = objectMapper.writeValueAsString(record);
 
         mockMvc.perform(put("/users/{id}", existingUserId)
@@ -169,7 +169,7 @@ public class UserControllerPutTests {
 
     @Test
     public void shouldReturnUnprocessableEntityWhenLoginAlreadyExisting() throws Exception {
-        UserUpdateRecord record = updateWith("Hal Jordan", existingLogin, "1234", "hal.jordan@email.com", UserStatus.ACTIVE, 1L);
+        UserUpdateRecord record = updateWith("Hal Jordan", existingLogin, "1234", "hal.jordan@email.com", EntityStatus.ACTIVE, 1L);
         String jsonBody = objectMapper.writeValueAsString(record);
 
         mockMvc.perform(put("/users/{id}", existingUserId)
@@ -188,7 +188,7 @@ public class UserControllerPutTests {
 
     @Test
     public void shouldReturnUnprocessableEntityWhenInvalidEmail() throws Exception {
-        UserUpdateRecord record = updateWith("Hal Jordan", "lanterna.verde", "1234", "invalidEmail", UserStatus.ACTIVE, 1L);
+        UserUpdateRecord record = updateWith("Hal Jordan", "lanterna.verde", "1234", "invalidEmail", EntityStatus.ACTIVE, 1L);
         String jsonBody = objectMapper.writeValueAsString(record);
 
         mockMvc.perform(put("/users/{id}", existingUserId)
@@ -207,7 +207,7 @@ public class UserControllerPutTests {
 
     @Test
     public void shouldReturnUnprocessableEntityWhenEmailIsBlank() throws Exception {
-        UserUpdateRecord record = updateWith("Hal Jordan", "lanterna.verde", "1234", "", UserStatus.ACTIVE, 1L);
+        UserUpdateRecord record = updateWith("Hal Jordan", "lanterna.verde", "1234", "", EntityStatus.ACTIVE, 1L);
         String jsonBody = objectMapper.writeValueAsString(record);
 
         mockMvc.perform(put("/users/{id}", existingUserId)
@@ -226,7 +226,7 @@ public class UserControllerPutTests {
 
     @Test
     public void shouldReturnUnprocessableEntityWhenEmailIsNull() throws Exception {
-        UserUpdateRecord record = updateWith("Hal Jordan", "lanterna.verde", "1234", null, UserStatus.ACTIVE, 1L);
+        UserUpdateRecord record = updateWith("Hal Jordan", "lanterna.verde", "1234", null, EntityStatus.ACTIVE, 1L);
         String jsonBody = objectMapper.writeValueAsString(record);
 
         mockMvc.perform(put("/users/{id}", existingUserId)
@@ -245,7 +245,7 @@ public class UserControllerPutTests {
 
     @Test
     public void shouldReturnUnprocessableEntityWhenEmailAlreadyExisting() throws Exception {
-        UserUpdateRecord record = updateWith("Hal Jordan", "lanterna.verde", "1234", existingEmail, UserStatus.ACTIVE, 1L);
+        UserUpdateRecord record = updateWith("Hal Jordan", "lanterna.verde", "1234", existingEmail, EntityStatus.ACTIVE, 1L);
         String jsonBody = objectMapper.writeValueAsString(record);
 
         mockMvc.perform(put("/users/{id}", existingUserId)
@@ -277,7 +277,7 @@ public class UserControllerPutTests {
 
     @Test
     public void shouldReturnUnprocessableEntityWhenInvalidUserIdEdit() throws Exception {
-        UserUpdateRecord record = updateWith("Hal Jordan", "lanterna.verde", "1234", "hal.jordan@email.com", UserStatus.ACTIVE, notExistingUserId);
+        UserUpdateRecord record = updateWith("Hal Jordan", "lanterna.verde", "1234", "hal.jordan@email.com", EntityStatus.ACTIVE, notExistingUserId);
         String jsonBody = objectMapper.writeValueAsString(record);
 
         mockMvc.perform(put("/users/{id}", existingUserId)
