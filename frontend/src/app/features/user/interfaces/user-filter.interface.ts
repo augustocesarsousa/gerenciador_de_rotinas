@@ -1,6 +1,6 @@
 export interface UserFilter {
   id?: number;
-  nome?: string;
+  name?: string;
   login?: string;
   email?: string;
   status?: string;
