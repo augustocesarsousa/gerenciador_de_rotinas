@@ -1,16 +1,15 @@
-package com.acsousa.gerenciador_de_rotinas.domain.user.models;
+package com.acsousa.gerenciador_de_rotinas.common.enums;
 
-import com.acsousa.gerenciador_de_rotinas.common.enums.DescribableEnum;
 import lombok.Getter;
 
 @Getter
-public enum UserStatus implements DescribableEnum {
+public enum EntityStatus implements DescribableEnum {
     ACTIVE("Ativo"),
     INACTIVE("Inativo");
 
     private final String description;
 
-    UserStatus(String description) {
+    EntityStatus(String description) {
         this.description = description;
     }
 

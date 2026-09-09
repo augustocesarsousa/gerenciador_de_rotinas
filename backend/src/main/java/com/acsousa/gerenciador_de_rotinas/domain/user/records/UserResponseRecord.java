@@ -2,7 +2,7 @@ package com.acsousa.gerenciador_de_rotinas.domain.user.records;
 
 import com.acsousa.gerenciador_de_rotinas.domain.role.records.RoleResponseRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserModel;
-import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.common.enums.EntityStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
@@ -24,7 +24,7 @@ public record UserResponseRecord(
     String email,
 
     @Schema(description = "Status do usuário no sistema", example = "ACTIVE")
-    UserStatus status,
+    EntityStatus status,
 
     @Schema(description = "Lista de perfis de acesso vinculados ao usuário")
     Set<RoleResponseRecord> roles,

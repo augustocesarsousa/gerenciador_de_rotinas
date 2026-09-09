@@ -34,6 +34,17 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(BusinessValidationException.class)
+    public ProblemDetail businessValidation(BusinessValidationException e, HttpServletRequest request) {
+        log.warn("Erro de regra de negócio: {}", e.getMessage());
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+        problemDetail.setTitle("Validation exception");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("message", e.getMessage());
+        return problemDetail;
+    }
+
     @ExceptionHandler(AttributeAlreadyExistsException.class)
     public ProblemDetail attributeAlreadyExists(AttributeAlreadyExistsException e, HttpServletRequest request) {
         log.warn("Atributo já existente: {}", e.getMessage());

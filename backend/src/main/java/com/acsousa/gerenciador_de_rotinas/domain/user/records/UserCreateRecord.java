@@ -2,7 +2,7 @@ package com.acsousa.gerenciador_de_rotinas.domain.user.records;
 
 import com.acsousa.gerenciador_de_rotinas.domain.role.records.RoleResponseRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserModel;
-import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.common.enums.EntityStatus;
 import com.acsousa.gerenciador_de_rotinas.domain.user.validations.UserEmailCreateValid;
 import com.acsousa.gerenciador_de_rotinas.domain.user.validations.UserIdEditValid;
 import com.acsousa.gerenciador_de_rotinas.domain.user.validations.UserLoginCreateValid;
@@ -49,7 +49,7 @@ public record UserCreateRecord(
         entity.setPassword(this.password);
         entity.setEmail(this.email);
         entity.setUserIdEdit(this.userIdEdit);
-        entity.setStatus(UserStatus.ACTIVE);
+        entity.setStatus(EntityStatus.ACTIVE);
         return entity;
     }
 }

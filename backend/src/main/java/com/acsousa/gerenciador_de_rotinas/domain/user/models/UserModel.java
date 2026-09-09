@@ -1,5 +1,6 @@
 package com.acsousa.gerenciador_de_rotinas.domain.user.models;
 
+import com.acsousa.gerenciador_de_rotinas.common.enums.EntityStatus;
 import com.acsousa.gerenciador_de_rotinas.domain.role.models.RoleModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,7 +40,7 @@ public class UserModel implements Serializable {
     private String email;
 
     @Column(nullable = false)
-    private UserStatus status;
+    private EntityStatus status;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -61,7 +62,7 @@ public class UserModel implements Serializable {
 
     @PrePersist
     protected void onCreate() {
-        this.status = UserStatus.ACTIVE;
+        this.status = EntityStatus.ACTIVE;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }

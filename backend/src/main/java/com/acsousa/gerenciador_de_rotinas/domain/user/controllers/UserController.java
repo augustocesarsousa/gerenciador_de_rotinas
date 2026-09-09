@@ -3,7 +3,7 @@ package com.acsousa.gerenciador_de_rotinas.domain.user.controllers;
 import com.acsousa.gerenciador_de_rotinas.common.records.EnumRecord;
 import com.acsousa.gerenciador_de_rotinas.common.records.PageResponseRecord;
 import com.acsousa.gerenciador_de_rotinas.common.utils.EnumUtil;
-import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.common.enums.EntityStatus;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserCreateRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserResponseRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserUpdateRecord;
@@ -73,6 +73,6 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Lista de status retornada com sucesso")
     @GetMapping("/status")
     public ResponseEntity<List<EnumRecord>> getStatus() {
-        return ResponseEntity.status(HttpStatus.OK).body(EnumUtil.convertEnumToList(UserStatus.class));
+        return ResponseEntity.status(HttpStatus.OK).body(EnumUtil.convertEnumToList(EntityStatus.class));
     }
 }

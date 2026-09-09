@@ -1,7 +1,7 @@
 package com.acsousa.gerenciador_de_rotinas.domain.user.specifications;
 
 import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserModel;
-import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.common.enums.EntityStatus;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ObjectUtils;
 
@@ -42,7 +42,7 @@ public class UserSpecification {
         };
     }
 
-    public static Specification<UserModel> statusEquals(UserStatus status) {
+    public static Specification<UserModel> statusEquals(EntityStatus status) {
         return (root, query, builder) -> {
             if (ObjectUtils.isEmpty(status)) {
                 return null;

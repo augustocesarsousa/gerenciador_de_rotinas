@@ -1,7 +1,7 @@
 package com.acsousa.gerenciador_de_rotinas.domain.user.records;
 
 import com.acsousa.gerenciador_de_rotinas.domain.role.records.RoleResponseRecord;
-import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.common.enums.EntityStatus;
 import com.acsousa.gerenciador_de_rotinas.domain.user.validations.UserEmailUpdateValid;
 import com.acsousa.gerenciador_de_rotinas.domain.user.validations.UserIdEditValid;
 import com.acsousa.gerenciador_de_rotinas.domain.user.validations.UserLoginUpdateValid;
@@ -33,7 +33,7 @@ public record UserUpdateRecord(
     String email,
 
     @Schema(description = "Status atual do usuário no sistema", example = "ACTIVE")
-    UserStatus status,
+    EntityStatus status,
 
     @Schema(description = "Lista de perfis de acesso associados ao usuário")
     Set<RoleResponseRecord> roles,

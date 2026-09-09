@@ -1,0 +1,155 @@
+<div class="p-6 max-w-2xl mx-auto bg-white shadow-md rounded-lg border border-slate-100 mt-6">
+  <h1 class="text-2xl font-bold mb-6 text-slate-800 flex items-center gap-2">
+    <mat-icon class="text-slate-600 scale-125">person_add</mat-icon>
+    Cadastro de Pessoa
+  </h1>
+
+  <form [formGroup]="personForm" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <!-- Nome -->
+    <mat-form-field appearance="outline" class="sm:col-span-2">
+      <mat-label>Nome ou Razão Social</mat-label>
+      <input matInput formControlName="name" type="text" placeholder="Ex: Bruce Wayne ou Wayne Enterprises" />
+      @if (personForm.get('name')?.hasError('required')) {
+        <mat-error>Nome é obrigatório</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Tipo de Pessoa -->
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo de Pessoa</mat-label>
+      <mat-select formControlName="type">
+        @for (type of personTypes; track type.index) {
+          <mat-option [value]="type.value">
+            {{ type.description }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Status -->
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        @for (status of personStatus; track status.index) {
+          <mat-option [value]="status.value">
+            {{ status.description }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Documento Dinâmico (CPF) -->
+    @if (personForm.get('type')?.value === 'PHYSICAL') {
+      <mat-form-field appearance="outline" class="sm:col-span-2">
+        <mat-label>CPF</mat-label>
+        <input matInput formControlName="cpf" type="text" placeholder="Apenas números, Ex: 12345678901" />
+        @if (personForm.get('cpf')?.hasError('required')) {
+          <mat-error>CPF é obrigatório para pessoa física</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    <!-- Documento Dinâmico (CNPJ) -->
+    @if (personForm.get('type')?.value === 'LEGAL') {
+      <mat-form-field appearance="outline" class="sm:col-span-2">
+        <mat-label>CNPJ</mat-label>
+        <input matInput formControlName="cnpj" type="text" placeholder="Apenas números, Ex: 12345678000199" />
+        @if (personForm.get('cnpj')?.hasError('required')) {
+          <mat-error>CNPJ é obrigatório para pessoa jurídica</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    <div class="sm:col-span-2 border-t border-slate-100 my-2 pt-2">
+      <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Endereço</h2>
+    </div>
+
+    <!-- Logradouro -->
+    <mat-form-field appearance="outline" class="sm:col-span-2">
+      <mat-label>Logradouro/Endereço</mat-label>
+      <input matInput formControlName="address" type="text" placeholder="Ex: Av. Paulista" />
+    </mat-form-field>
+
+    <!-- Número -->
+    <mat-form-field appearance="outline">
+      <mat-label>Número</mat-label>
+      <input matInput formControlName="number" type="number" placeholder="Ex: 100" />
+      @if (personForm.get('number')?.hasError('min')) {
+        <mat-error>Número não pode ser negativo</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- CEP -->
+    <mat-form-field appearance="outline">
+      <mat-label>CEP</mat-label>
+      <input matInput formControlName="zipcode" type="text" placeholder="Ex: 01311-000" />
+      @if (personForm.get('zipcode')?.hasError('pattern')) {
+        <mat-error>CEP inválido. Ex: 01001-000 ou 01001000</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Bairro -->
+    <mat-form-field appearance="outline">
+      <mat-label>Bairro</mat-label>
+      <input matInput formControlName="neighborhood" type="text" />
+    </mat-form-field>
+
+    <!-- Cidade -->
+    <mat-form-field appearance="outline">
+      <mat-label>Cidade</mat-label>
+      <input matInput formControlName="city" type="text" />
+    </mat-form-field>
+
+    <!-- Estado -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado (UF)</mat-label>
+      <input matInput formControlName="state" type="text" placeholder="Ex: SP" />
+    </mat-form-field>
+
+    <div class="sm:col-span-2 border-t border-slate-100 my-2 pt-2">
+      <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Contato</h2>
+    </div>
+
+    <!-- Telefone -->
+    <mat-form-field appearance="outline">
+      <mat-label>Telefone</mat-label>
+      <input matInput formControlName="phone" type="text" placeholder="Ex: 11999998888 (10 ou 11 dígitos)" />
+      @if (personForm.get('phone')?.hasError('pattern')) {
+        <mat-error>Telefone inválido (deve conter 10 ou 11 dígitos)</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- E-mail -->
+    <mat-form-field appearance="outline">
+      <mat-label>E-mail</mat-label>
+      <input matInput formControlName="email" type="email" placeholder="Ex: contato@exemplo.com" />
+      @if (personForm.get('email')?.hasError('email')) {
+        <mat-error>E-mail inválido</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Botões de Ação -->
+    <div class="sm:col-span-2 flex gap-4 mt-6">
+      <button
+        mat-flat-button
+        type="button"
+        class="w-full h-12 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold flex items-center justify-center gap-1 rounded-md"
+        (click)="returnToPersonSearch()"
+      >
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+
+      <button
+        mat-flat-button
+        type="button"
+        class="w-full h-12 bg-emerald-600! hover:bg-emerald-700! text-white! font-semibold flex items-center justify-center gap-1 rounded-md"
+        (click)="createPerson()"
+        [disabled]="personForm.invalid"
+      >
+        <mat-icon>save</mat-icon>
+        Salvar
+      </button>
+    </div>
+  </form>
+</div>

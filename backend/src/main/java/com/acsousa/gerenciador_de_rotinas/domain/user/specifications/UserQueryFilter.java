@@ -1,7 +1,7 @@
 package com.acsousa.gerenciador_de_rotinas.domain.user.specifications;
 
 import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserModel;
-import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.common.enums.EntityStatus;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,7 +15,7 @@ public class UserQueryFilter {
     private String name;
     private String login;
     private String email;
-    private UserStatus status;
+    private EntityStatus status;
 
     public Specification<UserModel> toSpecification() {
         return idEquals(id)

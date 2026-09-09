@@ -1,7 +1,7 @@
 package com.acsousa.gerenciador_de_rotinas.domain.user.services;
 
 import com.acsousa.gerenciador_de_rotinas.common.exceptions.ResourceNotFoundException;
-import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.common.enums.EntityStatus;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserCreateRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserResponseRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserUpdateRecord;
@@ -45,7 +45,7 @@ public class UserServiceIT {
         Assertions.assertNotNull(userResponse);
         Assertions.assertNotNull(userResponse.id());
         Assertions.assertEquals("Hal Jordan", userResponse.name());
-        Assertions.assertEquals(UserStatus.ACTIVE, userResponse.status());
+        Assertions.assertEquals(EntityStatus.ACTIVE, userResponse.status());
         Assertions.assertNotNull(userResponse.createdAt());
     }
 

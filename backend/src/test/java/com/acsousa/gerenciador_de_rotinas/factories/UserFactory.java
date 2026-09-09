@@ -1,7 +1,7 @@
 package com.acsousa.gerenciador_de_rotinas.factories;
 
 import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserModel;
-import com.acsousa.gerenciador_de_rotinas.domain.user.models.UserStatus;
+import com.acsousa.gerenciador_de_rotinas.common.enums.EntityStatus;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserCreateRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserResponseRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.user.records.UserUpdateRecord;
@@ -18,7 +18,7 @@ public class UserFactory {
         userModel.setLogin("lanterna.verde");
         userModel.setPassword("1234");
         userModel.setEmail("hal.jordan@email.com");
-        userModel.setStatus(UserStatus.ACTIVE);
+        userModel.setStatus(EntityStatus.ACTIVE);
         userModel.getRoles().add(RoleFactory.createRoleAdmin());
         userModel.setUserIdEdit(1L);
 
@@ -41,7 +41,7 @@ public class UserFactory {
                 "lanterna.verde",
                 "1234",
                 "hal.jordan@email.com",
-                UserStatus.ACTIVE,
+                EntityStatus.ACTIVE,
                 Set.of(RoleFactory.createRoleAdminResponseRecord()),
                 1L);
     }
