@@ -48,7 +48,7 @@
       <button
         mat-flat-button
         type="button"
-        (click)="openCreateModal()"
+        [routerLink]="['/financeiro/cadastros/bancos/novo']"
         class="w-full h-full bg-green-700! text-white! shadow-md! hover:bg-green-900! hover:shadow-lg! transition duration-200 ease-in-out"
       >
         <mat-icon>add</mat-icon>
@@ -100,7 +100,7 @@
       <ng-container matColumnDef="editar">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let bank">
-          <button mat-button color="accent" (click)="openEditModal(bank)">
+          <button mat-button color="accent" [routerLink]="['/financeiro/cadastros/bancos/editar', bank.id]">
             <mat-icon>edit</mat-icon>Editar
           </button>
         </td>

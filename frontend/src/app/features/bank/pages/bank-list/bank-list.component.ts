@@ -8,11 +8,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BankService } from '../../services/bank.service';
 import { BankQueryFilter, BankResponse, EntityStatus } from '../../models/bank.model';
-import { BankFormModalComponent } from '../../components/bank-form-modal/bank-form-modal.component';
 
 @Component({
   selector: 'app-bank-list',
@@ -27,13 +26,12 @@ import { BankFormModalComponent } from '../../components/bank-form-modal/bank-fo
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatDialogModule,
+    RouterLink,
   ],
   templateUrl: './bank-list.component.html',
 })
 export class BankListComponent implements OnInit {
   private readonly bankService = inject(BankService);
-  private readonly dialog = inject(MatDialog);
   private readonly toastr = inject(ToastrService);
   private readonly fb = inject(FormBuilder);
 
@@ -96,32 +94,5 @@ export class BankListComponent implements OnInit {
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
     this.getAllBanks();
-  }
-
-  openCreateModal(): void {
-    const dialogRef = this.dialog.open(BankFormModalComponent, {
-      width: '540px',
-      disableClose: true,
-    });
-
-    dialogRef.afterClosed().subscribe((saved: boolean) => {
-      if (saved) {
-        this.getAllBanks();
-      }
-    });
-  }
-
-  openEditModal(bank: BankResponse): void {
-    const dialogRef = this.dialog.open(BankFormModalComponent, {
-      width: '540px',
-      disableClose: true,
-      data: { bank },
-    });
-
-    dialogRef.afterClosed().subscribe((saved: boolean) => {
-      if (saved) {
-        this.getAllBanks();
-      }
-    });
   }
 }

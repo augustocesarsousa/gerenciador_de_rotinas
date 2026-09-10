@@ -1,0 +1,100 @@
+<div class="p-6 max-w-100">
+  <h1 class="text-2xl font-bold mb-4 text-gray-900">Edição de instituição bancária</h1>
+
+  @if (formReady) {
+    <form [formGroup]="bankEditForm" class="grid grid-cols-1 gap-2">
+      <!-- Id -->
+      <mat-form-field appearance="outline">
+        <mat-label>Id</mat-label>
+        <input matInput type="number" formControlName="id" />
+      </mat-form-field>
+
+      <!-- Status -->
+      <mat-radio-group formControlName="status" class="flex flex-row gap-4 my-2">
+        <mat-radio-button value="ACTIVE">Ativo</mat-radio-button>
+        <mat-radio-button value="INACTIVE">Inativo</mat-radio-button>
+      </mat-radio-group>
+
+      <!-- Código COMPE -->
+      <mat-form-field appearance="outline">
+        <mat-label>Código COMPE*</mat-label>
+        <input matInput type="text" formControlName="code" maxlength="3" />
+        @if (bankEditForm.get('code')?.touched && bankEditForm.get('code')?.hasError('required')) {
+          <mat-error>Código COMPE é obrigatório</mat-error>
+        }
+        @if (bankEditForm.get('code')?.touched && bankEditForm.get('code')?.hasError('pattern')) {
+          <mat-error>Deve conter 3 dígitos numéricos</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- ISPB -->
+      <mat-form-field appearance="outline">
+        <mat-label>ISPB</mat-label>
+        <input matInput type="text" formControlName="ispb" maxlength="8" />
+        @if (bankEditForm.get('ispb')?.touched && bankEditForm.get('ispb')?.hasError('pattern')) {
+          <mat-error>Deve conter 8 dígitos numéricos</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Nome Fantasia -->
+      <mat-form-field appearance="outline">
+        <mat-label>Nome Fantasia*</mat-label>
+        <input matInput type="text" formControlName="shortName" maxlength="60" />
+        @if (bankEditForm.get('shortName')?.touched && bankEditForm.get('shortName')?.hasError('required')) {
+          <mat-error>Nome fantasia é obrigatório</mat-error>
+        }
+        @if (bankEditForm.get('shortName')?.touched && bankEditForm.get('shortName')?.hasError('minlength')) {
+          <mat-error>Mínimo de 2 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Razão Social -->
+      <mat-form-field appearance="outline">
+        <mat-label>Razão Social*</mat-label>
+        <input matInput type="text" formControlName="name" maxlength="150" />
+        @if (bankEditForm.get('name')?.touched && bankEditForm.get('name')?.hasError('required')) {
+          <mat-error>Razão social é obrigatória</mat-error>
+        }
+        @if (bankEditForm.get('name')?.touched && bankEditForm.get('name')?.hasError('minlength')) {
+          <mat-error>Mínimo de 3 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Data de criação -->
+      <mat-form-field appearance="outline">
+        <mat-label>Data de criação</mat-label>
+        <input matInput type="text" formControlName="createdAt" />
+      </mat-form-field>
+
+      <!-- Data de alteração -->
+      <mat-form-field appearance="outline">
+        <mat-label>Data de alteração</mat-label>
+        <input matInput type="text" formControlName="updatedAt" />
+      </mat-form-field>
+
+      <!-- Botões -->
+      <div class="flex items-start gap-2 pt-2">
+        <button
+          mat-flat-button
+          type="button"
+          class="mt-2 w-full bg-green-600! text-white! hover:bg-green-900! shadow-md! transition duration-200"
+          (click)="editBank()"
+          [disabled]="bankEditForm.invalid"
+        >
+          <mat-icon>save</mat-icon>
+          Salvar
+        </button>
+
+        <button
+          mat-flat-button
+          type="button"
+          class="mt-2 w-full bg-red-600! text-white! hover:bg-red-900! shadow-md! transition duration-200"
+          (click)="returnToBankSearch()"
+        >
+          <mat-icon>cancel</mat-icon>
+          Cancelar
+        </button>
+      </div>
+    </form>
+  }
+</div>
