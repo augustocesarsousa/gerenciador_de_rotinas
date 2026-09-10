@@ -1,0 +1,127 @@
+<div class="p-6 max-w-lg w-full">
+  <div class="flex items-center gap-3 pb-4 border-b border-gray-200 dark:border-gray-700">
+    <div class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
+      <mat-icon>account_balance</mat-icon>
+    </div>
+    <div>
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+        @if (isEditing()) {
+          Editar Instituição Bancária
+        } @else {
+          Nova Instituição Bancária
+        }
+      </h2>
+      <p class="text-xs text-gray-500 dark:text-gray-400">
+        Preencha os dados oficiais de compensação da instituição
+      </p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="mt-6 flex flex-col gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <!-- Código COMPE -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Código COMPE</mat-label>
+        <input
+          matInput
+          formControlName="code"
+          placeholder="Ex: 001"
+          maxlength="3"
+        />
+        <mat-hint>Exatamente 3 dígitos</mat-hint>
+        @if (form.get('code')?.touched && form.get('code')?.hasError('required')) {
+          <mat-error>Código COMPE é obrigatório</mat-error>
+        }
+        @if (form.get('code')?.touched && form.get('code')?.hasError('pattern')) {
+          <mat-error>Deve conter 3 dígitos numéricos</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- ISPB -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>ISPB (Opcional)</mat-label>
+        <input
+          matInput
+          formControlName="ispb"
+          placeholder="Ex: 00000000"
+          maxlength="8"
+        />
+        <mat-hint>8 dígitos numéricos</mat-hint>
+        @if (form.get('ispb')?.touched && form.get('ispb')?.hasError('pattern')) {
+          <mat-error>Deve conter 8 dígitos</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Nome Abreviado -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nome Abreviado / Fantasia</mat-label>
+      <input
+        matInput
+        formControlName="shortName"
+        placeholder="Ex: Banco do Brasil"
+        maxlength="60"
+      />
+      @if (form.get('shortName')?.touched && form.get('shortName')?.hasError('required')) {
+        <mat-error>Nome abreviado é obrigatório</mat-error>
+      }
+      @if (form.get('shortName')?.touched && form.get('shortName')?.hasError('minlength')) {
+        <mat-error>Mínimo de 2 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Razão Social / Nome Oficial -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Razão Social / Nome Oficial</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="Ex: Banco do Brasil S.A."
+        maxlength="150"
+      />
+      @if (form.get('name')?.touched && form.get('name')?.hasError('required')) {
+        <mat-error>Razão Social é obrigatória</mat-error>
+      }
+      @if (form.get('name')?.touched && form.get('name')?.hasError('minlength')) {
+        <mat-error>Mínimo de 3 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Status -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="ACTIVE">Ativo</mat-option>
+        <mat-option value="INACTIVE">Inativo</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Ações -->
+    <div class="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <button
+        type="button"
+        mat-button
+        (click)="cancel()"
+        [disabled]="isLoading()"
+        class="text-gray-600 hover:text-gray-900"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        [disabled]="isLoading() || form.invalid"
+        class="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 transition"
+      >
+        <mat-icon>check</mat-icon>
+        @if (isLoading()) {
+          Salvando...
+        } @else {
+          Salvar
+        }
+      </button>
+    </div>
+  </form>
+</div>
