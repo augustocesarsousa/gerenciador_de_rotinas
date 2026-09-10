@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,10 +31,23 @@ export class BankEditComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly bankService = inject(BankService);
   private readonly toastr = inject(ToastrService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  bankEditForm!: FormGroup;
+  readonly formReady = signal<boolean>(false);
+  readonly isLoading = signal<boolean>(true);
+
+  bankEditForm: FormGroup = this.fb.group({
+    id: [{ value: '', disabled: true }],
+    status: ['ACTIVE' as EntityStatus, [Validators.required]],
+    code: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]],
+    ispb: ['', [Validators.pattern(/^(\d{8})?$/)]],
+    shortName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
+    name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]],
+    createdAt: [{ value: '', disabled: true }],
+    updatedAt: [{ value: '', disabled: true }],
+  });
+
   bankEdit!: BankResponse;
-  formReady = false;
   bankId!: number;
 
   ngOnInit(): void {
@@ -49,30 +62,30 @@ export class BankEditComponent implements OnInit {
   }
 
   getBankById(id: number): void {
+    this.isLoading.set(true);
     this.bankService.findById(id).subscribe({
       next: (response) => {
         this.bankEdit = response;
-        this.buildForm();
-        this.formReady = true;
+        this.bankEditForm.patchValue({
+          id: response.id,
+          status: response.status,
+          code: response.code,
+          ispb: response.ispb || '',
+          shortName: response.shortName,
+          name: response.name,
+          createdAt: this.formatDate(response.createdAt),
+          updatedAt: this.formatDate(response.updatedAt),
+        });
+        this.isLoading.set(false);
+        this.formReady.set(true);
+        this.cdr.detectChanges();
       },
       error: (err) => {
+        this.isLoading.set(false);
         const detail = err?.error?.detail || 'Instituição bancária não encontrada.';
         this.toastr.error(detail);
         this.returnToBankSearch();
       },
-    });
-  }
-
-  private buildForm(): void {
-    this.bankEditForm = this.fb.group({
-      id: [{ value: this.bankEdit.id, disabled: true }],
-      status: [this.bankEdit.status, [Validators.required]],
-      code: [this.bankEdit.code, [Validators.required, Validators.pattern(/^\d{3}$/)]],
-      ispb: [this.bankEdit.ispb || '', [Validators.pattern(/^(\d{8})?$/)]],
-      shortName: [this.bankEdit.shortName, [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
-      name: [this.bankEdit.name, [Validators.required, Validators.minLength(3), Validators.maxLength(150)]],
-      createdAt: [{ value: this.formatDate(this.bankEdit.createdAt), disabled: true }],
-      updatedAt: [{ value: this.formatDate(this.bankEdit.updatedAt), disabled: true }],
     });
   }
 

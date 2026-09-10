@@ -1,7 +1,12 @@
 <div class="p-6 max-w-100">
   <h1 class="text-2xl font-bold mb-4 text-gray-900">Edição de instituição bancária</h1>
 
-  @if (formReady) {
+  @if (isLoading()) {
+    <div class="py-8 text-gray-500 flex items-center gap-2">
+      <mat-icon class="text-blue-600">sync</mat-icon>
+      <span>Carregando dados da instituição bancária...</span>
+    </div>
+  } @else if (formReady()) {
     <form [formGroup]="bankEditForm" class="grid grid-cols-1 gap-2">
       <!-- Id -->
       <mat-form-field appearance="outline">
