@@ -8,7 +8,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { BankService } from '../../services/bank.service';
@@ -28,7 +27,6 @@ import { BankFormModalComponent } from '../../components/bank-form-modal/bank-fo
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatTooltipModule,
     MatDialogModule,
   ],
   templateUrl: './bank-list.component.html',
@@ -51,24 +49,30 @@ export class BankListComponent implements OnInit {
     'name',
     'ispb',
     'status',
-    'actions',
+    'editar',
   ];
 
-  filterForm: FormGroup = this.fb.group({
-    search: [''],
+  searchForm: FormGroup = this.fb.group({
+    code: [''],
+    name: [''],
+    shortName: [''],
+    ispb: [''],
     status: [''],
   });
 
   ngOnInit(): void {
-    this.loadBanks();
+    this.getAllBanks();
   }
 
-  loadBanks(): void {
+  getAllBanks(): void {
     this.isLoading.set(true);
 
-    const filterVal = this.filterForm.value;
+    const filterVal = this.searchForm.value;
     const filter: BankQueryFilter = {
-      search: filterVal.search?.trim() || undefined,
+      code: filterVal.code?.trim() || undefined,
+      name: filterVal.name?.trim() || undefined,
+      shortName: filterVal.shortName?.trim() || undefined,
+      ispb: filterVal.ispb?.trim() || undefined,
       status: (filterVal.status as EntityStatus) || undefined,
     };
 
@@ -88,24 +92,10 @@ export class BankListComponent implements OnInit {
       });
   }
 
-  onFilter(): void {
-    this.pageIndex.set(0);
-    this.loadBanks();
-  }
-
-  resetFilter(): void {
-    this.filterForm.reset({
-      search: '',
-      status: '',
-    });
-    this.pageIndex.set(0);
-    this.loadBanks();
-  }
-
   onPageChange(event: PageEvent): void {
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
-    this.loadBanks();
+    this.getAllBanks();
   }
 
   openCreateModal(): void {
@@ -116,7 +106,7 @@ export class BankListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((saved: boolean) => {
       if (saved) {
-        this.loadBanks();
+        this.getAllBanks();
       }
     });
   }
@@ -130,45 +120,8 @@ export class BankListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((saved: boolean) => {
       if (saved) {
-        this.loadBanks();
+        this.getAllBanks();
       }
-    });
-  }
-
-  toggleStatus(bank: BankResponse): void {
-    const novoStatus = bank.status === 'ACTIVE' ? 'Inativo' : 'Ativo';
-    this.bankService.toggleStatus(bank.id, 1).subscribe({
-      next: () => {
-        this.toastr.success(`Status da instituição alterado para ${novoStatus}!`);
-        this.loadBanks();
-      },
-      error: (err) => {
-        const detail = err?.error?.detail || 'Erro ao alternar status da instituição.';
-        this.toastr.error(detail);
-      },
-    });
-  }
-
-  deleteBank(bank: BankResponse): void {
-    const confirmed = window.confirm(
-      `Deseja realmente excluir a instituição bancária "${bank.shortName}" (${bank.code})?`
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    this.bankService.delete(bank.id).subscribe({
-      next: () => {
-        this.toastr.success('Instituição bancária excluída com sucesso!');
-        this.loadBanks();
-      },
-      error: (err) => {
-        const detail =
-          err?.error?.detail ||
-          'Não é possível excluir esta instituição bancária pois existem registros vinculados.';
-        this.toastr.error(detail);
-      },
     });
   }
 }

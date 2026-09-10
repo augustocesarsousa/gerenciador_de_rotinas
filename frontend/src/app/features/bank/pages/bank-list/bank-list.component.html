@@ -1,222 +1,128 @@
-<div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto flex flex-col gap-6">
-  <!-- Header da Página -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-    <div>
-      <div class="flex items-center gap-2">
-        <mat-icon class="text-blue-600 dark:text-blue-400">account_balance</mat-icon>
-        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-          Instituições Bancárias
-        </h1>
-      </div>
-      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-        Gerenciamento de bancos para vinculação de contas bancárias e conciliação financeira
-      </p>
+<div class="p-4 max-w-screen overflow-x-hidden">
+  <h1 class="text-xl font-bold mb-4 text-slate-800">Consulta de instituições bancárias</h1>
+
+  <!-- Form -->
+  <form
+    [formGroup]="searchForm"
+    (ngSubmit)="getAllBanks()"
+    class="grid grid-cols-1 gap-4 lg:grid-cols-6"
+  >
+    <mat-form-field appearance="outline">
+      <mat-label>Código</mat-label>
+      <input matInput type="text" formControlName="code" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="lg:col-span-2">
+      <mat-label>Razão Social</mat-label>
+      <input matInput type="text" formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nome Fantasia</mat-label>
+      <input matInput type="text" formControlName="shortName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>ISPB</mat-label>
+      <input matInput type="text" formControlName="ispb" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="">Selecionar...</mat-option>
+        <mat-option value="ACTIVE">Ativo</mat-option>
+        <mat-option value="INACTIVE">Inativo</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="lg:col-span-2 lg:pt-2 flex items-start gap-2">
+      <button
+        mat-flat-button
+        type="submit"
+        class="w-full h-full bg-blue-600 text-white shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200 ease-in-out"
+      >
+        <mat-icon>search</mat-icon>
+        Pesquisar
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        (click)="openCreateModal()"
+        class="w-full h-full bg-green-700! text-white! shadow-md! hover:bg-green-900! hover:shadow-lg! transition duration-200 ease-in-out"
+      >
+        <mat-icon>add</mat-icon>
+        Cadastrar
+      </button>
     </div>
+  </form>
 
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="openCreateModal()"
-      class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm transition"
-    >
-      <mat-icon>add</mat-icon>
-      <span>Nova Instituição Bancária</span>
-    </button>
-  </div>
+  <!-- Table -->
+  <div class="mt-6 w-full overflow-x-auto">
+    <table mat-table [dataSource]="banks()" class="min-w-300 w-full">
+      <!-- Código COMPE -->
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef>Código</th>
+        <td mat-cell *matCellDef="let bank">{{ bank.code }}</td>
+      </ng-container>
 
-  <!-- Card de Filtros -->
-  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-5">
-    <form [formGroup]="filterForm" (ngSubmit)="onFilter()" class="flex flex-col sm:flex-row items-center gap-4">
-      <!-- Busca Livre -->
-      <mat-form-field appearance="outline" class="w-full sm:flex-1">
-        <mat-label>Buscar por código, nome ou razão social</mat-label>
-        <input
-          matInput
-          formControlName="search"
-          placeholder="Ex: 001, Bradesco, Itaú..."
-        />
-        <mat-icon matSuffix class="text-gray-400">search</mat-icon>
-      </mat-form-field>
+      <!-- Nome Fantasia -->
+      <ng-container matColumnDef="shortName">
+        <th mat-header-cell *matHeaderCellDef>Nome Fantasia</th>
+        <td mat-cell *matCellDef="let bank">{{ bank.shortName }}</td>
+      </ng-container>
 
-      <!-- Filtro de Status -->
-      <mat-form-field appearance="outline" class="w-full sm:w-48">
-        <mat-label>Status</mat-label>
-        <mat-select formControlName="status">
-          <mat-option value="">Todos</mat-option>
-          <mat-option value="ACTIVE">Ativos</mat-option>
-          <mat-option value="INACTIVE">Inativos</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <!-- Razão Social -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Razão Social</th>
+        <td mat-cell *matCellDef="let bank">{{ bank.name }}</td>
+      </ng-container>
 
-      <!-- Botões de Ação do Filtro -->
-      <div class="flex items-center gap-2 w-full sm:w-auto pb-4 sm:pb-0">
-        <button
-          type="submit"
-          mat-flat-button
-          color="primary"
-          class="flex-1 sm:flex-initial bg-blue-600 text-white"
-        >
-          <mat-icon>filter_list</mat-icon>
-          Filtrar
-        </button>
+      <!-- ISPB -->
+      <ng-container matColumnDef="ispb">
+        <th mat-header-cell *matHeaderCellDef>ISPB</th>
+        <td mat-cell *matCellDef="let bank">{{ bank.ispb || '-' }}</td>
+      </ng-container>
 
-        <button
-          type="button"
-          mat-stroked-button
-          (click)="resetFilter()"
-          class="flex-1 sm:flex-initial"
-        >
-          <mat-icon>clear</mat-icon>
-          Limpar
-        </button>
-      </div>
-    </form>
-  </div>
+      <!-- Status -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let bank">
+          @if (bank.status === 'ACTIVE') {
+            Ativo
+          } @else {
+            Inativo
+          }
+        </td>
+      </ng-container>
 
-  <!-- Tabela de Bancos -->
-  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-    <div class="overflow-x-auto">
-      <table mat-table [dataSource]="banks()" class="w-full text-left border-collapse">
-        <!-- Código COMPE -->
-        <ng-container matColumnDef="code">
-          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700 dark:text-gray-200">
-            COMPE
-          </th>
-          <td mat-cell *matCellDef="let bank">
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded font-mono font-bold text-xs bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-              {{ bank.code }}
-            </span>
-          </td>
-        </ng-container>
-
-        <!-- Nome Abreviado / Fantasia -->
-        <ng-container matColumnDef="shortName">
-          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700 dark:text-gray-200">
-            Nome Fantasia
-          </th>
-          <td mat-cell *matCellDef="let bank" class="font-medium text-gray-900 dark:text-white">
-            {{ bank.shortName }}
-          </td>
-        </ng-container>
-
-        <!-- Razão Social -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700 dark:text-gray-200">
-            Razão Social
-          </th>
-          <td mat-cell *matCellDef="let bank" class="text-gray-600 dark:text-gray-300 text-sm">
-            {{ bank.name }}
-          </td>
-        </ng-container>
-
-        <!-- ISPB -->
-        <ng-container matColumnDef="ispb">
-          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700 dark:text-gray-200">
-            ISPB
-          </th>
-          <td mat-cell *matCellDef="let bank" class="text-gray-500 dark:text-gray-400 font-mono text-xs">
-            {{ bank.ispb || '-' }}
-          </td>
-        </ng-container>
-
-        <!-- Status -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700 dark:text-gray-200">
-            Status
-          </th>
-          <td mat-cell *matCellDef="let bank">
-            @if (bank.status === 'ACTIVE') {
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300 border border-green-200 dark:border-green-800">
-                <span class="w-1.5 h-1.5 rounded-full bg-green-600"></span>
-                Ativo
-              </span>
-            } @else {
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
-                <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
-                Inativo
-              </span>
-            }
-          </td>
-        </ng-container>
-
-        <!-- Ações -->
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef class="text-right font-semibold text-gray-700 dark:text-gray-200">
-            Ações
-          </th>
-          <td mat-cell *matCellDef="let bank" class="text-right whitespace-nowrap">
-            <div class="flex items-center justify-end gap-1">
-              <!-- Botão Editar -->
-              <button
-                mat-icon-button
-                matTooltip="Editar dados da instituição"
-                (click)="openEditModal(bank)"
-                class="text-blue-600 hover:text-blue-800"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-
-              <!-- Alternar Status -->
-              <button
-                mat-icon-button
-                [matTooltip]="bank.status === 'ACTIVE' ? 'Inativar instituição' : 'Ativar instituição'"
-                (click)="toggleStatus(bank)"
-                [class.text-amber-600]="bank.status === 'ACTIVE'"
-                [class.text-green-600]="bank.status === 'INACTIVE'"
-              >
-                <mat-icon>{{ bank.status === 'ACTIVE' ? 'pause_circle_outline' : 'play_circle_outline' }}</mat-icon>
-              </button>
-
-              <!-- Excluir -->
-              <button
-                mat-icon-button
-                matTooltip="Excluir instituição"
-                (click)="deleteBank(bank)"
-                class="text-red-500 hover:text-red-700"
-              >
-                <mat-icon>delete_outline</mat-icon>
-              </button>
-            </div>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-50 dark:hover:bg-gray-700/40 transition"></tr>
-      </table>
-    </div>
-
-    <!-- Estado Vazio -->
-    @if (!isLoading() && banks().length === 0) {
-      <div class="text-center py-12 px-4">
-        <mat-icon class="text-gray-400 text-5xl h-12 w-12 mx-auto">account_balance</mat-icon>
-        <h3 class="mt-2 text-base font-semibold text-gray-900 dark:text-white">
-          Nenhuma instituição bancária encontrada
-        </h3>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Tente ajustar os filtros de pesquisa ou cadastre uma nova instituição bancária.
-        </p>
-        <div class="mt-4">
-          <button
-            mat-stroked-button
-            color="primary"
-            (click)="openCreateModal()"
-          >
-            <mat-icon>add</mat-icon>
-            Cadastrar Instituição
+      <!-- Editar -->
+      <ng-container matColumnDef="editar">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let bank">
+          <button mat-button color="accent" (click)="openEditModal(bank)">
+            <mat-icon>edit</mat-icon>Editar
           </button>
-        </div>
-      </div>
-    }
+        </td>
+      </ng-container>
 
-    <!-- Paginador -->
-    <mat-paginator
-      [length]="totalElements()"
-      [pageSize]="pageSize()"
-      [pageIndex]="pageIndex()"
-      [pageSizeOptions]="[5, 10, 25, 50]"
-      (page)="onPageChange($event)"
-      showFirstLastButtons
-      class="border-t border-gray-200 dark:border-gray-700"
-    ></mat-paginator>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        [ngClass]="{ 'bg-red-100! text-red-600!': row.status === 'INACTIVE' }"
+      ></tr>
+    </table>
+
+    <!-- Pagination -->
+    <div class="w-full min-w-150">
+      <mat-paginator
+        [length]="totalElements()"
+        [pageSize]="pageSize()"
+        [pageIndex]="pageIndex()"
+        [pageSizeOptions]="[10, 20, 50]"
+        (page)="onPageChange($event)"
+      ></mat-paginator>
+    </div>
   </div>
 </div>

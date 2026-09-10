@@ -15,6 +15,7 @@ public class BankQueryFilter {
     private String code;
     private String name;
     private String shortName;
+    private String ispb;
     private String search;
     private EntityStatus status;
 
@@ -23,6 +24,7 @@ public class BankQueryFilter {
                 .and(codeEquals(code))
                 .and(nameLikeIgnoreCase(name))
                 .and(shortNameLikeIgnoreCase(shortName))
+                .and(ispbEquals(ispb))
                 .and(searchLikeIgnoreCase(search))
                 .and(statusEquals(status));
     }

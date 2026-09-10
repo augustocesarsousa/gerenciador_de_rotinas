@@ -35,5 +35,6 @@ export interface BankQueryFilter {
   code?: string;
   name?: string;
   shortName?: string;
+  ispb?: string;
   status?: EntityStatus;
 }

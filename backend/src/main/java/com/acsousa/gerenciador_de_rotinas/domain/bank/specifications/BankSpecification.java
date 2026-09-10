@@ -43,6 +43,15 @@ public class BankSpecification {
         };
     }
 
+    public static Specification<BankModel> ispbEquals(String ispb) {
+        return (root, query, builder) -> {
+            if (ObjectUtils.isEmpty(ispb)) {
+                return null;
+            }
+            return builder.equal(root.get("ispb"), ispb.trim());
+        };
+    }
+
     public static Specification<BankModel> statusEquals(EntityStatus status) {
         return (root, query, builder) -> {
             if (ObjectUtils.isEmpty(status)) {

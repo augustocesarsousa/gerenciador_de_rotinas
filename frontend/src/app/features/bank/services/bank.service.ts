@@ -36,6 +36,9 @@ export class BankService {
     if (filter.shortName?.trim()) {
       params = params.set('shortName', filter.shortName.trim());
     }
+    if (filter.ispb?.trim()) {
+      params = params.set('ispb', filter.ispb.trim());
+    }
     if (filter.status) {
       params = params.set('status', filter.status);
     }
