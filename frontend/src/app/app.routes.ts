@@ -16,6 +16,15 @@ export const routes: Routes = [
         path: 'persons',
         loadChildren: () => import('./features/person/person.routes').then((p) => p.personRoutes),
       },
+      {
+        path: 'financeiro/cadastros/bancos',
+        loadChildren: () => import('./features/bank/bank.routes').then((b) => b.bankRoutes),
+      },
+      {
+        path: 'banks',
+        redirectTo: 'financeiro/cadastros/bancos',
+        pathMatch: 'full',
+      },
       { path: 'finance/cadastros', component: ContentComponent },
       { path: 'finance/fluxo', component: ContentComponent },
     ],
