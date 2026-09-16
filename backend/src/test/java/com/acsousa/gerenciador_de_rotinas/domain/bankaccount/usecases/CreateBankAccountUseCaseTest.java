@@ -11,8 +11,9 @@ import com.acsousa.gerenciador_de_rotinas.domain.bankaccount.models.BankAccountM
 import com.acsousa.gerenciador_de_rotinas.domain.bankaccount.records.BankAccountCreateRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.bankaccount.records.BankAccountResponseRecord;
 import com.acsousa.gerenciador_de_rotinas.domain.bankaccount.repositories.BankAccountRepository;
-import org.junit.jupiter.api.Assertions;
+import com.acsousa.gerenciador_de_rotinas.factories.BankAccountFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,10 +25,13 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Testes Unitários - CreateBankAccountUseCase")
 class CreateBankAccountUseCaseTest {
 
     @Mock
@@ -49,143 +53,137 @@ class CreateBankAccountUseCaseTest {
                 1L, "001", "00000000", "Banco do Brasil S.A.", "Banco do Brasil",
                 EntityStatus.ACTIVE, Instant.now(), Instant.now(), 1L
         );
-
-        validCheckingRecord = new BankAccountCreateRecord(
-                1L,
-                BankAccountType.CHECKING,
-                "Conta Corrente Principal",
-                "1234",
-                "0",
-                "123456",
-                "7",
-                "Convênio 01/2026",
-                new BigDecimal("100.00"),
-                LocalDate.now(),
-                EntityStatus.ACTIVE,
-                1L
-        );
-
-        savedCheckingModel = new BankAccountModel(
-                10L,
-                activeBank,
-                BankAccountType.CHECKING,
-                "Conta Corrente Principal",
-                "1234",
-                "0",
-                "123456",
-                "7",
-                "Convênio 01/2026",
-                new BigDecimal("100.00"),
-                LocalDate.now(),
-                EntityStatus.ACTIVE,
-                Instant.now(),
-                Instant.now(),
-                1L
-        );
+        validCheckingRecord = BankAccountFactory.createBankAccountCreateRecord(1L);
+        savedCheckingModel = BankAccountFactory.createBankAccountModel(activeBank);
     }
 
     @Test
+    @DisplayName("Deve criar conta bancária tradicional com sucesso quando os dados forem válidos")
     void shouldCreateBankAccountWhenDataIsValid() {
+        // given
         when(bankRepository.findById(1L)).thenReturn(Optional.of(activeBank));
         when(bankAccountRepository.existsByBankIdAndAgencyNumberAndAccountNumberAndStatus(1L, "1234", "123456", EntityStatus.ACTIVE))
                 .thenReturn(false);
         when(bankAccountRepository.save(any(BankAccountModel.class))).thenReturn(savedCheckingModel);
 
+        // when
         BankAccountResponseRecord response = createBankAccountUseCase.execute(validCheckingRecord);
 
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(10L, response.id());
-        Assertions.assertEquals(1L, response.bankId());
-        Assertions.assertEquals("Conta Corrente Principal", response.description());
-        Assertions.assertEquals(BankAccountType.CHECKING, response.accountType());
+        // then
+        assertThat(response).isNotNull();
+        assertThat(response.id()).isEqualTo(1L);
+        assertThat(response.bankId()).isEqualTo(1L);
+        assertThat(response.description()).isEqualTo("Conta Principal - Bradesco");
+        assertThat(response.accountType()).isEqualTo(BankAccountType.CHECKING);
+        assertThat(response.agencyNumber()).isEqualTo("1234");
+        assertThat(response.accountNumber()).isEqualTo("123456");
 
         verify(bankRepository, times(1)).findById(1L);
         verify(bankAccountRepository, times(1)).save(any(BankAccountModel.class));
     }
 
     @Test
+    @DisplayName("Deve criar Caixa Interno (CASH_DESK) com sucesso ignorando e limpando dados bancários")
     void shouldCreateCashDeskAccountWithoutBankDetails() {
-        BankAccountCreateRecord cashDeskRecord = new BankAccountCreateRecord(
-                null,
-                BankAccountType.CASH_DESK,
-                "Caixa Cantina",
-                null,
-                null,
-                null,
-                null,
-                null,
-                BigDecimal.ZERO,
-                LocalDate.now(),
-                EntityStatus.ACTIVE,
-                1L
-        );
-
-        BankAccountModel savedCashDeskModel = new BankAccountModel(
-                11L,
-                null,
-                BankAccountType.CASH_DESK,
-                "Caixa Cantina",
-                null,
-                null,
-                null,
-                null,
-                null,
-                BigDecimal.ZERO,
-                LocalDate.now(),
-                EntityStatus.ACTIVE,
-                Instant.now(),
-                Instant.now(),
-                1L
-        );
-
+        // given
+        BankAccountCreateRecord cashDeskRecord = BankAccountFactory.createCashDeskCreateRecord();
+        BankAccountModel savedCashDeskModel = BankAccountFactory.createCashDeskModel();
         when(bankAccountRepository.save(any(BankAccountModel.class))).thenReturn(savedCashDeskModel);
 
+        // when
         BankAccountResponseRecord response = createBankAccountUseCase.execute(cashDeskRecord);
 
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(11L, response.id());
-        Assertions.assertNull(response.bankId());
-        Assertions.assertEquals(BankAccountType.CASH_DESK, response.accountType());
+        // then
+        assertThat(response).isNotNull();
+        assertThat(response.id()).isEqualTo(2L);
+        assertThat(response.bankId()).isNull();
+        assertThat(response.agencyNumber()).isNull();
+        assertThat(response.accountNumber()).isNull();
+        assertThat(response.accountType()).isEqualTo(BankAccountType.CASH_DESK);
 
         verify(bankRepository, never()).findById(any());
         verify(bankAccountRepository, times(1)).save(any(BankAccountModel.class));
     }
 
     @Test
-    void shouldThrowResourceNotFoundExceptionWhenBankNotFound() {
-        when(bankRepository.findById(1L)).thenReturn(Optional.empty());
-
-        Assertions.assertThrows(ResourceNotFoundException.class, () ->
-                createBankAccountUseCase.execute(validCheckingRecord)
+    @DisplayName("Deve lançar BusinessValidationException quando banco for nulo para conta tradicional")
+    void shouldThrowBusinessValidationExceptionWhenBankIsNullForTraditionalAccount() {
+        // given
+        BankAccountCreateRecord recordWithoutBank = new BankAccountCreateRecord(
+                null, BankAccountType.CHECKING, "Conta Sem Banco", "1234", "0", "123456", "7",
+                null, new BigDecimal("100.00"), LocalDate.now(), EntityStatus.ACTIVE, 1L
         );
+
+        // when & then
+        assertThatThrownBy(() -> createBankAccountUseCase.execute(recordWithoutBank))
+                .isInstanceOf(BusinessValidationException.class)
+                .hasMessageContaining("A instituição bancária é obrigatória");
 
         verify(bankAccountRepository, never()).save(any());
     }
 
     @Test
+    @DisplayName("Deve lançar ResourceNotFoundException quando o banco informado não existir")
+    void shouldThrowResourceNotFoundExceptionWhenBankNotFound() {
+        // given
+        when(bankRepository.findById(1L)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> createBankAccountUseCase.execute(validCheckingRecord))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Banco não encontrado");
+
+        verify(bankAccountRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Deve lançar BusinessValidationException quando o banco vinculado estiver inativo")
     void shouldThrowBusinessValidationExceptionWhenBankIsInactive() {
+        // given
         BankModel inactiveBank = new BankModel(
                 2L, "033", "00000000", "Santander", "Santander",
                 EntityStatus.INACTIVE, Instant.now(), Instant.now(), 1L
         );
         when(bankRepository.findById(1L)).thenReturn(Optional.of(inactiveBank));
 
-        Assertions.assertThrows(BusinessValidationException.class, () ->
-                createBankAccountUseCase.execute(validCheckingRecord)
-        );
+        // when & then
+        assertThatThrownBy(() -> createBankAccountUseCase.execute(validCheckingRecord))
+                .isInstanceOf(BusinessValidationException.class)
+                .hasMessageContaining("Não é possível vincular uma conta a uma instituição bancária inativa");
 
         verify(bankAccountRepository, never()).save(any());
     }
 
     @Test
+    @DisplayName("Deve lançar BusinessValidationException quando agência ou conta estiverem vazios")
+    void shouldThrowBusinessValidationExceptionWhenAgencyOrAccountIsBlank() {
+        // given
+        when(bankRepository.findById(1L)).thenReturn(Optional.of(activeBank));
+        BankAccountCreateRecord missingAgencyRecord = new BankAccountCreateRecord(
+                1L, BankAccountType.CHECKING, "Conta Sem Agência", "", "0", "123456", "7",
+                null, new BigDecimal("100.00"), LocalDate.now(), EntityStatus.ACTIVE, 1L
+        );
+
+        // when & then
+        assertThatThrownBy(() -> createBankAccountUseCase.execute(missingAgencyRecord))
+                .isInstanceOf(BusinessValidationException.class)
+                .hasMessageContaining("número da agência é obrigatório");
+
+        verify(bankAccountRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Deve lançar AttributeAlreadyExistsException quando já existir conta ativa com mesmo banco, agência e conta")
     void shouldThrowAttributeAlreadyExistsExceptionWhenActiveAccountAlreadyExists() {
+        // given
         when(bankRepository.findById(1L)).thenReturn(Optional.of(activeBank));
         when(bankAccountRepository.existsByBankIdAndAgencyNumberAndAccountNumberAndStatus(1L, "1234", "123456", EntityStatus.ACTIVE))
                 .thenReturn(true);
 
-        Assertions.assertThrows(AttributeAlreadyExistsException.class, () ->
-                createBankAccountUseCase.execute(validCheckingRecord)
-        );
+        // when & then
+        assertThatThrownBy(() -> createBankAccountUseCase.execute(validCheckingRecord))
+                .isInstanceOf(AttributeAlreadyExistsException.class)
+                .hasMessageContaining("Já existe uma conta bancária ativa cadastrada");
 
         verify(bankAccountRepository, never()).save(any());
     }
