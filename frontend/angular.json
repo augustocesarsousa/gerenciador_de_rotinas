@@ -40,7 +40,10 @@
             "styles": [
               "src/material-theme.scss",
               "src/styles.css"
-            ]
+            ],
+            "loader": {
+              ".html": "text"
+            }
           },
           "configurations": {
             "production": {

@@ -2,7 +2,6 @@ package com.acsousa.gerenciador_de_rotinas.domain.bankaccount.usecases;
 
 import com.acsousa.gerenciador_de_rotinas.common.enums.EntityStatus;
 import com.acsousa.gerenciador_de_rotinas.common.exceptions.AttributeAlreadyExistsException;
-import com.acsousa.gerenciador_de_rotinas.common.exceptions.BusinessValidationException;
 import com.acsousa.gerenciador_de_rotinas.common.exceptions.ResourceNotFoundException;
 import com.acsousa.gerenciador_de_rotinas.domain.bank.models.BankModel;
 import com.acsousa.gerenciador_de_rotinas.domain.bank.repositories.BankRepository;
