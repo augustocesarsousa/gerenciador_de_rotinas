@@ -1,0 +1,152 @@
+<div class="p-6 max-w-lg">
+  <h1 class="text-2xl font-bold mb-4 text-gray-900">Edição de conta bancária</h1>
+
+  @if (isLoading()) {
+    <div class="py-8 text-gray-500 flex items-center gap-2">
+      <mat-icon class="text-blue-600 animate-spin">sync</mat-icon>
+      <span>Carregando dados da conta bancária...</span>
+    </div>
+  } @else if (formReady()) {
+    <form [formGroup]="bankAccountEditForm" class="grid grid-cols-1 gap-2">
+      <!-- Id -->
+      <mat-form-field appearance="outline">
+        <mat-label>Id</mat-label>
+        <input matInput type="number" formControlName="id" />
+      </mat-form-field>
+
+      <!-- Status (Radio Group horizontal logo abaixo do Id) -->
+      <mat-radio-group formControlName="status" class="flex flex-row gap-4 my-2">
+        <mat-radio-button value="ACTIVE">Ativo</mat-radio-button>
+        <mat-radio-button value="INACTIVE">Inativo</mat-radio-button>
+      </mat-radio-group>
+
+      <!-- Tipo de Conta -->
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo de Conta*</mat-label>
+        <mat-select formControlName="accountType">
+          <mat-option value="CHECKING">Corrente</mat-option>
+          <mat-option value="SAVINGS">Poupança</mat-option>
+          <mat-option value="INVESTMENT">Aplicação</mat-option>
+          <mat-option value="CASH_DESK">Caixa Interno</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Banco (Oculto se Caixa Interno) -->
+      @if (!isCashDesk()) {
+        <mat-form-field appearance="outline">
+          <mat-label>Banco*</mat-label>
+          <mat-select formControlName="bankId">
+            <mat-option value="">Selecione o banco...</mat-option>
+            @for (b of banks(); track b.id) {
+              <mat-option [value]="b.id">{{ b.code }} - {{ b.shortName }}</mat-option>
+            }
+          </mat-select>
+          @if (bankAccountEditForm.get('bankId')?.touched && bankAccountEditForm.get('bankId')?.hasError('required')) {
+            <mat-error>Banco é obrigatório</mat-error>
+          }
+        </mat-form-field>
+      }
+
+      <!-- Descrição / Nome da Conta -->
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição / Nome da Conta*</mat-label>
+        <input matInput formControlName="description" type="text" maxlength="100" />
+        @if (bankAccountEditForm.get('description')?.touched && bankAccountEditForm.get('description')?.hasError('required')) {
+          <mat-error>Descrição é obrigatória</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Agência e Dígito (Ocultos se Caixa Interno) -->
+      @if (!isCashDesk()) {
+        <div class="grid grid-cols-3 gap-2">
+          <mat-form-field appearance="outline" class="col-span-2">
+            <mat-label>Agência*</mat-label>
+            <input matInput formControlName="agencyNumber" type="text" maxlength="5" />
+            @if (bankAccountEditForm.get('agencyNumber')?.touched && bankAccountEditForm.get('agencyNumber')?.hasError('required')) {
+              <mat-error>Agência é obrigatória</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Dígito</mat-label>
+            <input matInput formControlName="agencyDigit" type="text" maxlength="2" />
+          </mat-form-field>
+        </div>
+
+        <!-- Conta e Dígito (Ocultos se Caixa Interno) -->
+        <div class="grid grid-cols-3 gap-2">
+          <mat-form-field appearance="outline" class="col-span-2">
+            <mat-label>Conta*</mat-label>
+            <input matInput formControlName="accountNumber" type="text" maxlength="12" />
+            @if (bankAccountEditForm.get('accountNumber')?.touched && bankAccountEditForm.get('accountNumber')?.hasError('required')) {
+              <mat-error>Conta é obrigatória</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Dígito*</mat-label>
+            <input matInput formControlName="accountDigit" type="text" maxlength="2" />
+            @if (bankAccountEditForm.get('accountDigit')?.touched && bankAccountEditForm.get('accountDigit')?.hasError('required')) {
+              <mat-error>Obrigatório</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      }
+
+      <!-- Projeto / Convênio Vinculado -->
+      <mat-form-field appearance="outline">
+        <mat-label>Projeto / Convênio Vinculado</mat-label>
+        <input matInput formControlName="projectOrAgreement" type="text" maxlength="150" />
+      </mat-form-field>
+
+      <!-- Saldo Inicial e Data do Saldo Inicial -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Saldo Inicial*</mat-label>
+          <input matInput formControlName="initialBalance" type="number" step="0.01" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data do Saldo Inicial*</mat-label>
+          <input matInput formControlName="initialBalanceDate" type="date" />
+        </mat-form-field>
+      </div>
+
+      <!-- Data de criação -->
+      <mat-form-field appearance="outline">
+        <mat-label>Data de criação</mat-label>
+        <input matInput type="text" formControlName="createdAt" />
+      </mat-form-field>
+
+      <!-- Data de alteração -->
+      <mat-form-field appearance="outline">
+        <mat-label>Data de alteração</mat-label>
+        <input matInput type="text" formControlName="updatedAt" />
+      </mat-form-field>
+
+      <!-- Botões -->
+      <div class="flex items-center gap-4 pt-4">
+        <button
+          mat-flat-button
+          type="button"
+          class="bg-emerald-600! hover:bg-emerald-700! text-white! rounded-full px-8 py-2.5 flex items-center justify-center gap-2 shadow-md transition duration-200"
+          (click)="updateBankAccount()"
+          [disabled]="bankAccountEditForm.invalid"
+        >
+          <mat-icon>save</mat-icon>
+          Salvar
+        </button>
+
+        <button
+          mat-flat-button
+          type="button"
+          class="bg-red-600! hover:bg-red-700! text-white! rounded-full px-8 py-2.5 flex items-center justify-center gap-2 shadow-md transition duration-200"
+          (click)="returnToSearch()"
+        >
+          <mat-icon>cancel</mat-icon>
+          Cancelar
+        </button>
+      </div>
+    </form>
+  }
+</div>

@@ -25,6 +25,16 @@ export const routes: Routes = [
         redirectTo: 'financeiro/cadastros/bancos',
         pathMatch: 'full',
       },
+      {
+        path: 'financeiro/cadastros/contas-bancarias',
+        loadChildren: () =>
+          import('./features/bank-account/bank-account.routes').then((ba) => ba.bankAccountRoutes),
+      },
+      {
+        path: 'bank-accounts',
+        redirectTo: 'financeiro/cadastros/contas-bancarias',
+        pathMatch: 'full',
+      },
       { path: 'finance/cadastros', component: ContentComponent },
       { path: 'finance/fluxo', component: ContentComponent },
     ],
